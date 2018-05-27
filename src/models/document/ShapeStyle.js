@@ -1,7 +1,9 @@
 // @flow
 import { decorate, observable } from 'mobx';
+import { genId, serializable } from '../serialize';
 
 class ShapeStyle {
+  id = genId();
   strokeWidth: number = 1;
   strokeColor: null | string = 'black';
   fillColor: null | string = null;
@@ -18,6 +20,12 @@ class ShapeStyle {
     }
   }
 }
+
+serializable(ShapeStyle, 'ShapeStyle', [
+  'strokeWidth',
+  'strokeColor',
+  'fillColor',
+]);
 
 export default decorate(ShapeStyle, {
   strokeWidth: observable,

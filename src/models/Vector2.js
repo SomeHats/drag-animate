@@ -1,7 +1,9 @@
 // @flow
 import { decorate, observable } from 'mobx';
+import { genId, serializable } from './serialize';
 
 class Vector2 {
+  id = genId();
   x: number;
   y: number;
 
@@ -21,6 +23,8 @@ class Vector2 {
     this.y = other.y;
   }
 }
+
+serializable(Vector2, 'Vector2', ['x', 'y']);
 
 export default decorate(Vector2, {
   x: observable,

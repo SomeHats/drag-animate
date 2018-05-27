@@ -10,7 +10,8 @@ import Editor from './models/editor/Editor';
 const root = document.getElementById('root');
 invariant(root, 'root must exist');
 
-const scene = new Scene(200, 100);
+const scene = new Scene().init(200, 100);
+window.scene = scene;
 const editor = new Editor(scene);
 
 ReactDOM.render(

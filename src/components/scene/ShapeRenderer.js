@@ -15,7 +15,8 @@ class ShapeRenderer extends React.Component<Props> {
       return <PolygonShapeRenderer shape={shape} />;
     }
 
-    throw new Error('Unknown shape ${shape.prototype.constructor.name}');
+    // $FlowFixMe
+    throw new Error(`Unknown shape ${shape.prototype.constructor.name}`);
   }
 }
 
