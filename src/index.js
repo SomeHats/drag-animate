@@ -10,9 +10,9 @@ import Editor from './models/editor/Editor';
 const root = document.getElementById('root');
 invariant(root, 'root must exist');
 
-const scene = new Scene().init(200, 100);
-window.scene = scene;
-const editor = new Editor(scene);
+const editor = Editor.fromAutoSave(() => new Scene().init(200, 100));
+editor.startAutosaving();
+window.editor = editor;
 
 ReactDOM.render(
   <Fragment>

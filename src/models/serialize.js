@@ -27,7 +27,7 @@ type Model = {|
   refs: { [string]: Ref },
 |};
 
-const ID_JOINER = ' @ ';
+const ID_JOINER = '#';
 
 const modelsByConstructor: Map<any, Model> = new Map();
 const modelsByName: Map<string, Model> = new Map();
@@ -54,7 +54,7 @@ const getScopedIdForSerializable = (object: Serializable): ScopedId => {
     `id "${String(object.id)}" must not include "${ID_JOINER}"`
   );
   const model = getModelForClass(object.__proto__.constructor);
-  return `${model.name} @ ${String(object.id)}`;
+  return `${model.name}${ID_JOINER}${String(object.id)}`;
 };
 
 export const serializeSingleRef = (
@@ -180,6 +180,5 @@ export const deserializeItem = (
 
 export const deserialize = (object: Serialization): Serializable => {
   const { rootId, objectsById } = object;
-  debugger;
   return deserializeItem(objectsById, rootId);
 };
