@@ -1,23 +1,22 @@
 // @flow
 import React from 'react';
+import { observer } from 'mobx-react';
 import type Shape from '../../models/document/shapes/Shape';
-import PolygonShape from '../../models/document/shapes/PolygonShape';
-import PolygonShapeRenderer from './PolygonShapeRenderer';
+import ViewportCanvas from '../lib/ViewportCanvas';
 
 type Props = {
   shape: Shape,
 };
 
 class ShapeRenderer extends React.Component<Props> {
-  render() {
+  draw = (ctx: CanvasRenderingContext2D) => {
     const { shape } = this.props;
-    if (shape instanceof PolygonShape) {
-      return <PolygonShapeRenderer shape={shape} />;
-    }
+    shape.drawToCanvas(ctx);
+  };
 
-    // $FlowFixMe
-    throw new Error(`Unknown shape ${shape.prototype.constructor.name}`);
+  render() {
+    return <ViewportCanvas draw={this.draw} />;
   }
 }
 
-export default ShapeRenderer;
+export default observer(ShapeRenderer);

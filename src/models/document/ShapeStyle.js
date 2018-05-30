@@ -19,6 +19,18 @@ class ShapeStyle {
       ctx.stroke();
     }
   }
+
+  drawPath(ctx: CanvasRenderingContext2D, path: Path2D) {
+    if (this.fillColor !== null) {
+      ctx.fillStyle = this.fillColor;
+      ctx.fill(path);
+    }
+    if (this.strokeColor !== null) {
+      ctx.lineWidth = this.strokeWidth;
+      ctx.strokeStyle = this.strokeColor;
+      ctx.stroke(path);
+    }
+  }
 }
 
 serializable(ShapeStyle, 'ShapeStyle', [

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import pink from '@material-ui/core/colors/pink';
 import lightGreen from '@material-ui/core/colors/lightGreen';
 
-import ViewportCanvas, { type ViewportContext } from '../lib/ViewportCanvas';
+import ViewportCanvas, { type Viewport } from '../lib/ViewportCanvas';
 import type { CreatePolygonShape } from '../../models/editor/EditorState';
 import Vector2 from '../../models/Vector2';
 import type Editor from '../../models/editor/Editor';
@@ -27,7 +27,7 @@ class CreatePolygonInteraction extends React.Component<Props> {
     isSnapped: false,
   });
 
-  draw = (ctx: CanvasRenderingContext2D, { px }: ViewportContext) => {
+  draw = (ctx: CanvasRenderingContext2D, { px }: Viewport) => {
     const shape = this.props.editorState.shape;
     const { extraPoint, isSnapped } = this.canvasState;
 
@@ -58,7 +58,7 @@ class CreatePolygonInteraction extends React.Component<Props> {
   };
 
   handleClick = action(
-    (e: SyntheticMouseEvent<HTMLCanvasElement>, viewport: ViewportContext) => {
+    (e: SyntheticMouseEvent<HTMLCanvasElement>, viewport: Viewport) => {
       const { extraPoint, isSnapped } = this.canvasState;
       if (isSnapped) {
         this.props.editorState.shape.close();
@@ -70,7 +70,7 @@ class CreatePolygonInteraction extends React.Component<Props> {
   );
 
   handleMouseMove = action(
-    (e: SyntheticMouseEvent<HTMLCanvasElement>, viewport: ViewportContext) => {
+    (e: SyntheticMouseEvent<HTMLCanvasElement>, viewport: Viewport) => {
       const extraPoint = viewport.screenCoordsToSceneCoords({
         x: e.clientX,
         y: e.clientY,

@@ -2,10 +2,10 @@
 import * as React from 'react';
 import invariant from 'invariant';
 import { withStyles } from '@material-ui/core/styles';
-import { ViewportConsumer, type ViewportContext } from './ViewportProvider';
+import { ViewportConsumer, type Viewport } from './ViewportProvider';
 import Canvas from './Canvas';
 
-export type { ViewportContext } from './ViewportProvider';
+export type { Viewport } from './ViewportProvider';
 
 const styles = theme => ({
   container: {
@@ -17,11 +17,11 @@ const styles = theme => ({
 
 type ViewportMouseEvent = (
   SyntheticMouseEvent<HTMLCanvasElement>,
-  ViewportContext
+  Viewport
 ) => mixed;
 
 type RequiredProps = {
-  draw: (CanvasRenderingContext2D, ViewportContext) => void,
+  draw: (CanvasRenderingContext2D, Viewport) => void,
   cursor?: string,
   onMouseDown?: ViewportMouseEvent,
   onMouseUp?: ViewportMouseEvent,
@@ -30,7 +30,7 @@ type RequiredProps = {
 };
 
 type Props = RequiredProps & {
-  viewport: ViewportContext,
+  viewport: Viewport,
   classes: { [string]: string },
 };
 

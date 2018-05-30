@@ -4,6 +4,7 @@ import { decorate, observable, action, autorun } from 'mobx';
 import invariant from 'invariant';
 import type { EditorState } from './EditorState';
 import Scene from '../document/Scene';
+import Shape from '../document/shapes/Shape';
 import PolygonShape from '../document/shapes/PolygonShape';
 
 const AUTOSAVE_NAME = 'drag-animate.autosave';
@@ -11,6 +12,8 @@ const AUTOSAVE_NAME = 'drag-animate.autosave';
 class Editor {
   state: EditorState = { type: 'Idle' };
   scene: Scene;
+  // TODO: make this not an array
+  hoverSet: Shape[] = [];
 
   static fromAutoSave(fallback: () => Scene) {
     try {
@@ -68,6 +71,9 @@ class Editor {
         type: 'CreatePolygonShape',
         shape,
       });
+    },
+    replaceDocumentWithNew: (width = 200, height = 100) => {
+      this.scene = new Scene().init(width, height);
     },
   };
 }

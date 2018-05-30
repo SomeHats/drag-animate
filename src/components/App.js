@@ -1,8 +1,8 @@
 // @flow
 import React, { Fragment } from 'react';
 import { observer } from 'mobx-react';
-import type Editor from '../models/editor/Editor';
-import ViewportProvider from './lib/ViewportProvider';
+import type Viewport from '../models/editor/Viewport';
+import { ViewportProvider } from './lib/ViewportProvider';
 import HeadBar from './ui/HeadBar';
 import ShapeDrawer from './ui/ShapeDrawer';
 import GridCanvas from './guides/GridCanvas';
@@ -11,19 +11,21 @@ import EditorStateInteraction from './interactions/EditorStateInteraction';
 import SceneRenderer from './scene/SceneRenderer';
 
 type Props = {
-  editor: Editor,
+  viewport: Viewport,
 };
 
 class App extends React.Component<Props, void> {
   render() {
-    const { editor } = this.props;
+    const { viewport } = this.props;
+    const { editor } = viewport;
+    const { scene } = editor;
     return (
       <Fragment>
         <HeadBar />
-        <ViewportProvider scene={editor.scene}>
-          <SceneRenderer scene={editor.scene} />
-          <GridCanvas scene={editor.scene} />
-          <KeyPoints scene={editor.scene} />
+        <ViewportProvider viewport={viewport}>
+          <SceneRenderer scene={scene} />
+          <GridCanvas />
+          <KeyPoints scene={scene} />
           <EditorStateInteraction editor={editor} />
         </ViewportProvider>
         <ShapeDrawer editor={editor} />

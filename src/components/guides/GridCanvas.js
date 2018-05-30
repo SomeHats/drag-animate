@@ -1,24 +1,26 @@
 // @flow
 import React from 'react';
-import ViewportCanvas from '../lib/ViewportCanvas';
+import ViewportCanvas, { type Viewport } from '../lib/ViewportCanvas';
 import type Scene from '../../models/document/Scene';
-import type { ViewportContext } from '../lib/ViewportProvider';
 
-type Props = {
-  scene: Scene,
-};
-
-class GridCanvas extends React.Component<Props> {
-  draw = (ctx: CanvasRenderingContext2D, { px }: ViewportContext) => {
-    this.drawOutline(ctx, px);
+class GridCanvas extends React.Component<{}> {
+  draw = (
+    ctx: CanvasRenderingContext2D,
+    { px, sceneWidth, sceneHeight }: Viewport
+  ) => {
+    this.drawOutline(ctx, px, sceneWidth, sceneHeight);
     // this.drawGridLines(ctx, px);
   };
 
-  drawOutline(ctx: CanvasRenderingContext2D, px: number) {
-    const { scene } = this.props;
+  drawOutline(
+    ctx: CanvasRenderingContext2D,
+    px: number,
+    width: number,
+    height: number
+  ) {
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.lineWidth = px;
-    ctx.strokeRect(0, 0, scene.width, scene.height);
+    ctx.strokeRect(0, 0, width, height);
   }
 
   // drawGridLines(ctx: CanvasRenderingContext2D, px: number) {

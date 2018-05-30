@@ -2,11 +2,11 @@
 import React from 'react';
 import invariant from 'invariant';
 import { withStyles } from '@material-ui/core/styles';
-import { ViewportConsumer, type ViewportContext } from './ViewportProvider';
+import { ViewportConsumer, type Viewport } from './ViewportProvider';
 import Canvas from './Canvas';
 
 type RequiredProps = {
-  draw: (CanvasRenderingContext2D, ViewportContext) => void,
+  draw: (CanvasRenderingContext2D, Viewport) => void,
   width: number,
   height: number,
   sceneX: number,
@@ -16,7 +16,7 @@ type RequiredProps = {
 };
 
 type Props = RequiredProps & {
-  viewport: ViewportContext,
+  viewport: Viewport,
   classes: { [string]: string },
 };
 
