@@ -3,6 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import type Editor from '../../models/editor/Editor';
 import CreatePolygoneInteraction from './CreatePolygonInteraction';
+import IdleInteraction from './IdleInteraction';
 
 type Props = {
   editor: Editor,
@@ -26,7 +27,7 @@ class EditorStateInteraction extends React.Component<Props> {
           />
         );
       case 'Idle':
-        return null;
+        return <IdleInteraction editor={editor} />;
       default:
         throw impossible(editorState.type);
     }

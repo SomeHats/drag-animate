@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { observer } from 'mobx-react';
 import invariant from 'invariant';
 import { withStyles } from '@material-ui/core/styles';
 import { ViewportConsumer, type Viewport } from './ViewportProvider';
@@ -67,7 +68,7 @@ class _CanvasInViewport extends React.Component<Props> {
   }
 }
 
-const CanvasInViewport = withStyles(styles)(_CanvasInViewport);
+const CanvasInViewport = withStyles(styles)(observer(_CanvasInViewport));
 
 export default (props: $Exact<RequiredProps>) => (
   <ViewportConsumer>

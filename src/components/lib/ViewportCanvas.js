@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import invariant from 'invariant';
+import { observer } from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import { ViewportConsumer, type Viewport } from './ViewportProvider';
 import Canvas from './Canvas';
@@ -23,6 +24,8 @@ type ViewportMouseEvent = (
 type RequiredProps = {
   draw: (CanvasRenderingContext2D, Viewport) => void,
   cursor?: string,
+  canvasRef?: (HTMLCanvasElement | null) => void,
+  contextRef?: (CanvasRenderingContext2D | null) => void,
   onMouseDown?: ViewportMouseEvent,
   onMouseUp?: ViewportMouseEvent,
   onMouseMove?: ViewportMouseEvent,
@@ -70,6 +73,8 @@ class _ViewportCanvas extends React.Component<Props, void> {
       classes,
       viewport,
       cursor,
+      canvasRef,
+      contextRef,
       onMouseDown,
       onMouseMove,
       onMouseUp,
@@ -83,6 +88,8 @@ class _ViewportCanvas extends React.Component<Props, void> {
         draw={this.draw}
         width={pxWidth}
         height={pxHeight}
+        canvasRef={canvasRef}
+        contextRef={contextRef}
         onMouseDown={onMouseDown ? this.handleMouseDown : undefined}
         onMouseMove={onMouseMove ? this.handleMouseMove : undefined}
         onMouseUp={onMouseUp ? this.handleMouseUp : undefined}
@@ -92,7 +99,7 @@ class _ViewportCanvas extends React.Component<Props, void> {
   }
 }
 
-const ViewportCanvas = withStyles(styles)(_ViewportCanvas);
+const ViewportCanvas = withStyles(styles)(observer(_ViewportCanvas));
 
 export default (props: RequiredProps) => (
   <ViewportConsumer>

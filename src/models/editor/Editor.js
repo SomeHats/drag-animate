@@ -13,7 +13,7 @@ class Editor {
   state: EditorState = { type: 'Idle' };
   scene: Scene;
   // TODO: make this not an array
-  hoverSet: Shape[] = [];
+  hoveredShapes: Shape[] = [];
 
   static fromAutoSave(fallback: () => Scene) {
     try {
@@ -57,10 +57,17 @@ class Editor {
 
   enterState(newState: EditorState) {
     this.state = newState;
+    this.hoveredShapes = [];
   }
 
   clearState() {
     this.state = { type: 'Idle' };
+  }
+
+  setHovers(hoveredShapes: Shape[]) {
+    if (this.hoveredShapes.length !== 0 || hoveredShapes.length !== 0) {
+      this.hoveredShapes = hoveredShapes;
+    }
   }
 
   commands = {
@@ -81,6 +88,8 @@ class Editor {
 export default decorate(Editor, {
   scene: observable,
   state: observable,
+  hoveredShapes: observable,
   enterState: action,
   clearState: action,
+  setHovers: action,
 });

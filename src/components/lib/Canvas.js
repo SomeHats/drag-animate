@@ -9,6 +9,8 @@ type Props = {|
   height: number,
   className?: string,
   style?: Object,
+  canvasRef?: (HTMLCanvasElement | null) => void,
+  contextRef?: (CanvasRenderingContext2D | null) => void,
   onMouseEnter?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
   onMouseLeave?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
   onMouseDown?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
@@ -51,8 +53,10 @@ class Canvas extends React.Component<Props> {
   };
 
   canvasRef = (el: HTMLCanvasElement | null) => {
-    this.canvas = el;
+    this.canvas = el || null;
     this.ctx = el ? el.getContext('2d') : null;
+    if (this.props.canvasRef) this.props.canvasRef(this.canvas);
+    if (this.props.contextRef) this.props.contextRef(this.ctx);
   };
 
   render() {

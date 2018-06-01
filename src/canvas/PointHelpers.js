@@ -14,4 +14,5 @@ export const square = (
   ctx.lineTo(x + halfSize, y - halfSize);
   ctx.lineTo(x + halfSize, y + halfSize);
   ctx.lineTo(x - halfSize, y + halfSize);
+  ctx.lineTo(x - halfSize, y - halfSize);
 };
