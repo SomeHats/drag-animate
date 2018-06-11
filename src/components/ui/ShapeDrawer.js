@@ -10,6 +10,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import type Editor from '../../models/editor/Editor';
+import type Shape from '../../models/document/shapes/Shape';
 
 const styles = theme => ({
   drawerPaper: {
@@ -29,6 +30,10 @@ type Props = {
 };
 
 class ShapeDrawer extends React.Component<Props> {
+  handleClick = (shape: Shape) => () => {
+    this.props.editor.commands.selectShape(shape);
+  };
+
   render() {
     const { classes, editor } = this.props;
     return (
@@ -40,14 +45,16 @@ class ShapeDrawer extends React.Component<Props> {
         <div className={classes.toolbar} />
         <List subheader={<ListSubheader>Shapes</ListSubheader>}>
           {editor.scene.shapes.map((shape, i) => (
-            <ListItem key={i} button>
-              <ListItemText>{JSON.stringify(shape, null, 2)}</ListItemText>
+            <ListItem key={i} button onClick={this.handleClick(shape)}>
+              <ListItemText>
+                <pre>{JSON.stringify(shape, null, 2)}</pre>
+              </ListItemText>
             </ListItem>
           ))}
         </List>
 
         <Button
-          onClick={editor.commands.createPolygonShape}
+          onClick={editor.commands.createShape}
           className={classes.addButton}
           variant="fab"
           color="primary"

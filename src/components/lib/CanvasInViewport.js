@@ -12,8 +12,10 @@ type RequiredProps = {
   height: number,
   sceneX: number,
   sceneY: number,
+  cursor?: string,
   onMouseEnter?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
   onMouseLeave?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
+  onMouseDown?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
 };
 
 type Props = RequiredProps & {
@@ -44,8 +46,10 @@ class _CanvasInViewport extends React.Component<Props> {
       sceneY,
       viewport,
       classes,
+      cursor,
       onMouseEnter,
       onMouseLeave,
+      onMouseDown,
     } = this.props;
 
     const { panX, panY, zoom } = viewport;
@@ -60,9 +64,11 @@ class _CanvasInViewport extends React.Component<Props> {
         height={height}
         style={{
           transform: `translate(${x}px, ${y}px)`,
+          cursor: cursor,
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        onMouseDown={onMouseDown}
       />
     );
   }

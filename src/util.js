@@ -1,5 +1,4 @@
 // @flow
-
 let i = 0;
 export opaque type ID = string;
 export const genId = (): ID =>

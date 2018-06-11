@@ -22,11 +22,26 @@ class Vector2 {
     this.x = other.x;
     this.y = other.y;
   }
+
+  findNearest(others: Vector2[]): Vector2 | null {
+    let nearest = null;
+    let nearestDistance = Infinity;
+    others.forEach(point => {
+      const distance = this.distanceTo(point);
+      if (distance < nearestDistance) {
+        nearest = point;
+        nearestDistance = distance;
+      }
+    });
+    return nearest;
+  }
 }
 
 serializable(Vector2, 'Vector2', ['x', 'y']);
 
-export default decorate(Vector2, {
+decorate(Vector2, {
   x: observable,
   y: observable,
 });
+
+export default Vector2;

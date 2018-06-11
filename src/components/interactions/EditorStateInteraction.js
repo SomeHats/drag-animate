@@ -2,8 +2,9 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import type Editor from '../../models/editor/Editor';
-import CreatePolygoneInteraction from './CreatePolygonInteraction';
+import CreateShapeInteraction from './CreateShapeInteraction';
 import IdleInteraction from './IdleInteraction';
+import SelectedShapeInteraction from './SelectedShapeInteraction';
 
 type Props = {
   editor: Editor,
@@ -19,15 +20,16 @@ class EditorStateInteraction extends React.Component<Props> {
     const editorState = editor.state;
 
     switch (editorState.type) {
-      case 'CreatePolygonShape':
-        return (
-          <CreatePolygoneInteraction
-            editorState={editorState}
-            editor={editor}
-          />
-        );
       case 'Idle':
         return <IdleInteraction editor={editor} />;
+      case 'CreateShape':
+        return (
+          <CreateShapeInteraction editorState={editorState} editor={editor} />
+        );
+      case 'ShapeSelected':
+        return (
+          <SelectedShapeInteraction editor={editor} shape={editorState.shape} />
+        );
       default:
         throw impossible(editorState.type);
     }

@@ -1,10 +1,10 @@
 // @flow
 import { decorate, observable, computed, action } from 'mobx';
+import invariant from 'invariant';
 import type Editor from './Editor';
 import Vector2 from '../Vector2';
 
 const MARGIN = 15;
-type Point = { x: number, y: number };
 
 class Viewport {
   top = 64;
@@ -15,9 +15,11 @@ class Viewport {
   windowHeight = window.innerHeight;
   scale = window.devicePixelRatio || 1;
   editor: Editor;
+  basePoint: Vector2 = new Vector2(0, 0);
 
   constructor(editor: Editor) {
     this.editor = editor;
+    this.basePoint.set(editor.scene.keyPointSet.keyPoints[0]);
   }
 
   get sceneWidth(): number {
@@ -64,19 +66,27 @@ class Viewport {
     return 1 / this.zoom;
   }
 
-  sceneCoordsToScreenCoords({ x, y }: Point): Vector2 {
+  get nearestKeyPoint(): Vector2 {
+    const nearest = this.basePoint.findNearest(
+      this.editor.scene.keyPointSet.keyPoints
+    );
+    invariant(nearest, 'nearest must be found');
+    return nearest;
+  }
+
+  sceneCoordsToScreenCoords = (x: number, y: number): Vector2 => {
     return new Vector2(
       x * this.zoom + this.panX + this.left,
       y * this.zoom + this.panY + this.top
     );
-  }
+  };
 
-  screenCoordsToSceneCoords({ x, y }: Point): Vector2 {
+  screenCoordsToSceneCoords = (x: number, y: number): Vector2 => {
     return new Vector2(
       (x - this.left - this.panX) / this.zoom,
       (y - this.top - this.panY) / this.zoom
     );
-  }
+  };
 
   setup() {
     window.addEventListener('resize', this.onResize);
@@ -106,4 +116,5 @@ export default decorate(Viewport, {
   panX: computed,
   panY: computed,
   px: computed,
+  nearestKeyPoint: invariant,
 });

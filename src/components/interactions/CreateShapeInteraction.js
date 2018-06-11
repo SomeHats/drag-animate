@@ -6,13 +6,13 @@ import pink from '@material-ui/core/colors/pink';
 import lightGreen from '@material-ui/core/colors/lightGreen';
 
 import ViewportCanvas, { type Viewport } from '../lib/ViewportCanvas';
-import type { CreatePolygonShape } from '../../models/editor/EditorState';
+import type { CreateShape } from '../../models/editor/EditorState';
 import Vector2 from '../../models/Vector2';
 import type Editor from '../../models/editor/Editor';
 import * as PointHelpers from '../../canvas/PointHelpers';
 
 type Props = {
-  editorState: CreatePolygonShape,
+  editorState: CreateShape,
   editor: Editor,
 };
 
@@ -27,16 +27,17 @@ class CreatePolygonInteraction extends React.Component<Props> {
     isSnapped: false,
   });
 
-  draw = (ctx: CanvasRenderingContext2D, { px }: Viewport) => {
+  draw = (ctx: CanvasRenderingContext2D, { px, basePoint }: Viewport) => {
     const shape = this.props.editorState.shape;
     const { extraPoint, isSnapped } = this.canvasState;
 
     ctx.beginPath();
     shape.points.forEach((point, i) => {
+      const { x, y } = point.getAtBasePoint(basePoint);
       if (i === 0) {
-        ctx.moveTo(point.x, point.y);
+        ctx.moveTo(x, y);
       } else {
-        ctx.lineTo(point.x, point.y);
+        ctx.lineTo(x, y);
       }
     });
 
@@ -51,39 +52,55 @@ class CreatePolygonInteraction extends React.Component<Props> {
 
     ctx.beginPath();
     shape.points.forEach(point => {
-      PointHelpers.square(ctx, point, 5 * px);
+      PointHelpers.square(ctx, point.getAtBasePoint(basePoint), 5 * px);
     });
     ctx.fillStyle = pink['A400'];
     ctx.fill();
   };
 
   handleClick = action(
-    (e: SyntheticMouseEvent<HTMLCanvasElement>, viewport: Viewport) => {
+    (
+      e: SyntheticMouseEvent<HTMLCanvasElement>,
+      { nearestKeyPoint }: Viewport
+    ) => {
       const { extraPoint, isSnapped } = this.canvasState;
+      const { editor, editorState } = this.props;
       if (isSnapped) {
-        this.props.editorState.shape.close();
-        this.props.editor.clearState();
+        editorState.shape.close();
+        editor.clearState();
       } else if (extraPoint) {
-        this.props.editorState.shape.addPoint(extraPoint);
+        const point = editor.scene.createMagicPointThingy();
+        point.setAtKeyPoint(nearestKeyPoint, extraPoint);
+        editorState.shape.addPoint(point);
       }
     }
   );
 
   handleMouseMove = action(
-    (e: SyntheticMouseEvent<HTMLCanvasElement>, viewport: Viewport) => {
-      const extraPoint = viewport.screenCoordsToSceneCoords({
-        x: e.clientX,
-        y: e.clientY,
-      });
+    (
+      e: SyntheticMouseEvent<HTMLCanvasElement>,
+      {
+        basePoint,
+        sceneCoordsToScreenCoords,
+        screenCoordsToSceneCoords,
+      }: Viewport
+    ) => {
+      let extraPoint = screenCoordsToSceneCoords(e.clientX, e.clientY);
 
       const points = this.props.editorState.shape.points;
       let isSnapped = false;
       if (points.length > 2) {
-        const firstPoint = points[0];
-        const screenFirstPoint = viewport.sceneCoordsToScreenCoords(firstPoint);
-        const screenExtraPoint = viewport.sceneCoordsToScreenCoords(extraPoint);
+        const firstPoint = points[0].getAtBasePoint(basePoint);
+        const screenFirstPoint = sceneCoordsToScreenCoords(
+          firstPoint.x,
+          firstPoint.y
+        );
+        const screenExtraPoint = sceneCoordsToScreenCoords(
+          extraPoint.x,
+          extraPoint.y
+        );
         if (screenFirstPoint.distanceTo(screenExtraPoint) < SNAP_THRESHOLD) {
-          extraPoint.set(firstPoint);
+          extraPoint = firstPoint;
           isSnapped = true;
         }
       }

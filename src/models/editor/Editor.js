@@ -5,7 +5,6 @@ import invariant from 'invariant';
 import type { EditorState } from './EditorState';
 import Scene from '../document/Scene';
 import Shape from '../document/shapes/Shape';
-import PolygonShape from '../document/shapes/PolygonShape';
 
 const AUTOSAVE_NAME = 'drag-animate.autosave';
 
@@ -71,16 +70,22 @@ class Editor {
   }
 
   commands = {
-    createPolygonShape: () => {
-      const shape = new PolygonShape();
+    replaceDocumentWithNew: (width = 200, height = 100) => {
+      this.scene = new Scene().init(width, height);
+    },
+    createShape: () => {
+      const shape = new Shape();
       this.scene.addShape(shape);
       this.enterState({
-        type: 'CreatePolygonShape',
+        type: 'CreateShape',
         shape,
       });
     },
-    replaceDocumentWithNew: (width = 200, height = 100) => {
-      this.scene = new Scene().init(width, height);
+    selectShape: (shape: Shape) => {
+      this.enterState({
+        type: 'ShapeSelected',
+        shape,
+      });
     },
   };
 }

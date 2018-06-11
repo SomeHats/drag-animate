@@ -4,6 +4,7 @@ import invariant from 'invariant';
 import {
   genId,
   serializable,
+  ref,
   refList,
   serialize,
   deserialize,
@@ -11,12 +12,14 @@ import {
 } from '../serialize';
 import Vector2 from '../Vector2';
 import Shape from './shapes/Shape';
+import KeyPointSet from './KeypointSet';
+import MagicPointThingy from './MagicPointThingy';
 
 class Scene {
   id = genId();
   width: number;
   height: number;
-  keyPoints: Vector2[] = [];
+  keyPointSet: KeyPointSet;
   shapes: Shape[] = [];
 
   static deserialize(object: Serialization): Scene {
@@ -28,7 +31,8 @@ class Scene {
   init(width: number, height: number): this {
     this.width = width;
     this.height = height;
-    this.keyPoints = [new Vector2(width / 2, height / 2)];
+    this.keyPointSet = new KeyPointSet();
+    this.keyPointSet.addKeyPoint(new Vector2(width / 2, height / 2));
     return this;
   }
 
@@ -39,17 +43,20 @@ class Scene {
   serialize(): Serialization {
     return serialize(this);
   }
+
+  createMagicPointThingy(): MagicPointThingy {
+    return new MagicPointThingy().init(this.keyPointSet);
+  }
 }
 
 serializable(Scene, 'Scene', ['width', 'height'], {
-  keyPoints: refList(Vector2),
+  keyPointSet: ref(KeyPointSet),
   shapes: refList(Shape),
 });
 
 export default decorate(Scene, {
   width: observable,
   height: observable,
-  keyPoints: observable,
   shapes: observable,
 });
 

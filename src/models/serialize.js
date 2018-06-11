@@ -16,7 +16,7 @@ type Serializable = {
 };
 
 type Ref = {|
-  list: boolean,
+  type: 'one' | 'list' | 'object-map',
   target: Class<Serializable>,
 |};
 
@@ -28,6 +28,8 @@ type Model = {|
 |};
 
 const ID_JOINER = '#';
+
+const impossible = (type: empty) => new Error(`impossible value ${type}`);
 
 const modelsByConstructor: Map<any, Model> = new Map();
 const modelsByName: Map<string, Model> = new Map();
@@ -76,6 +78,32 @@ const serializeRefList = (
   return objects.map(object => serializeSingleRef(object, objectsById));
 };
 
+const serializeObjectMap = (
+  objectsByKey: { [string]: Serializable },
+  objectsById: { [ScopedId]: Object }
+): { [string]: ScopedId } => {
+  return Object.keys(objectsByKey)
+    .map(key => [key, serializeSingleRef(objectsByKey[key], objectsById)])
+    .reduce((memo, [key, object]) => ({ ...memo, [key]: object }), {});
+};
+
+const serializeRef = (
+  ref: Ref,
+  value: any,
+  objectsById: { [ScopedId]: Object }
+): any => {
+  switch (ref.type) {
+    case 'one':
+      return serializeSingleRef(value, objectsById);
+    case 'list':
+      return serializeRefList(value, objectsById);
+    case 'object-map':
+      return serializeObjectMap(value, objectsById);
+    default:
+      throw impossible(ref.type);
+  }
+};
+
 const serializeItem = (
   object: Serializable,
   objectsById: { [ScopedId]: Object }
@@ -84,23 +112,25 @@ const serializeItem = (
 
   const result = {};
   primitives.forEach(key => (result[key] = object[key]));
-  Object.keys(refs).map(
-    key =>
-      (result[key] = refs[key].list
-        ? serializeRefList(object[key], objectsById)
-        : serializeSingleRef(object[key], objectsById))
-  );
+  Object.keys(refs).map(key => {
+    result[key] = serializeRef(refs[key], object[key], objectsById);
+  });
 
   return result;
 };
 
 export const ref = (target: Class<Serializable>): Ref => ({
-  list: false,
+  type: 'one',
   target,
 });
 
 export const refList = (target: Class<Serializable>): Ref => ({
-  list: true,
+  type: 'list',
+  target,
+});
+
+export const refObjectMap = (target: Class<Serializable>): Ref => ({
+  type: 'object-map',
   target,
 });
 
@@ -148,6 +178,31 @@ const parseId = (id: ScopedId): { model: Model, id: string } => {
   return { model, id: parsed[1] };
 };
 
+const deserializeRef = (
+  ref: Ref,
+  value: any,
+  objectsById: { [ScopedId]: Object },
+  resultCache: { [ScopedId]: Serializable } = {}
+) => {
+  switch (ref.type) {
+    case 'one':
+      return deserializeItem(objectsById, value, resultCache);
+    case 'list':
+      return value.map(id => deserializeItem(objectsById, id, resultCache));
+    case 'object-map':
+      return Object.keys(value)
+        .map(mapKey => [
+          mapKey,
+          deserializeItem(objectsById, value[mapKey], resultCache),
+        ])
+        .reduce(
+          (memo, [mapKey, object]) => ({ ...memo, [mapKey]: object }),
+          {}
+        );
+    default:
+      throw impossible(ref.type);
+  }
+};
 export const deserializeItem = (
   objectsById: { [ScopedId]: Object },
   scopedId: ScopedId,
@@ -163,14 +218,12 @@ export const deserializeItem = (
     result.id = id;
     primitives.forEach(key => (result[key] = source[key]));
     Object.keys(refs).forEach(key => {
-      const ref = refs[key];
-      if (ref.list) {
-        result[key] = source[key].map(id =>
-          deserializeItem(objectsById, id, resultCache)
-        );
-      } else {
-        result[key] = deserializeItem(objectsById, source[key], resultCache);
-      }
+      result[key] = deserializeRef(
+        refs[key],
+        source[key],
+        objectsById,
+        resultCache
+      );
     });
 
     resultCache[scopedId] = result;

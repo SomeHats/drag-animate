@@ -26,3 +26,13 @@ export const ViewportProvider = ({
   viewport: Viewport,
   children: React.Node,
 }): React.Node => <Provider value={viewport}>{children}</Provider>;
+
+export const withViewport = <Props: {}>(
+  Component: React.ComponentType<Props>
+): React.ComponentType<
+  $Diff<Props, { viewport: Viewport | void }>
+> => props => (
+  <ViewportConsumer>
+    {viewport => <Component {...props} viewport={viewport} />}
+  </ViewportConsumer>
+);

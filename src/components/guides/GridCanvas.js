@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import ViewportCanvas, { type Viewport } from '../lib/ViewportCanvas';
-import type Scene from '../../models/document/Scene';
 
 class GridCanvas extends React.Component<{}> {
   draw = (

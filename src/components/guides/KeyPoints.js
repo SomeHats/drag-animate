@@ -10,11 +10,11 @@ type Props = {
 
 class KeyPoints extends React.Component<Props> {
   render() {
-    const { keyPoints } = this.props.scene;
+    const { keyPointSet } = this.props.scene;
     return (
       <Fragment>
-        {keyPoints.map((keyPoint, i) => (
-          <KeyPoint keyPoint={keyPoint} key={i} />
+        {keyPointSet.keyPoints.map(keyPoint => (
+          <KeyPoint keyPoint={keyPoint} key={String(keyPoint.id)} />
         ))}
       </Fragment>
     );

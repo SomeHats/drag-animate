@@ -1,13 +1,18 @@
 // @flow
-import type PolygonShape from '../document/shapes/PolygonShape';
+import type Shape from '../document/shapes/Shape';
 
 export type Idle = {|
   type: 'Idle',
 |};
 
-export type CreatePolygonShape = {|
-  type: 'CreatePolygonShape',
-  shape: PolygonShape,
+export type CreateShape = {|
+  type: 'CreateShape',
+  shape: Shape,
 |};
 
-export type EditorState = Idle | CreatePolygonShape;
+export type ShapeSelected = {|
+  type: 'ShapeSelected',
+  shape: Shape,
+|};
+
+export type EditorState = Idle | CreateShape | ShapeSelected;
