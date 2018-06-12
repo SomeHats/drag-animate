@@ -9,6 +9,7 @@ import GridCanvas from './guides/GridCanvas';
 import KeyPoints from './guides/KeyPoints';
 import EditorStateInteraction from './interactions/EditorStateInteraction';
 import SceneRenderer from './scene/SceneRenderer';
+import BaseTrackyThing from './BaseTrackyThing';
 
 type Props = {
   viewport: Viewport,
@@ -25,6 +26,7 @@ class App extends React.Component<Props, void> {
         <ViewportProvider viewport={viewport}>
           <SceneRenderer scene={scene} />
           <GridCanvas />
+          <BaseTrackyThing />
           <KeyPoints scene={scene} />
           <EditorStateInteraction editor={editor} />
         </ViewportProvider>

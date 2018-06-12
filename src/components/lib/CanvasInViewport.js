@@ -6,6 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { ViewportConsumer, type Viewport } from './ViewportProvider';
 import Canvas from './Canvas';
 
+export type { Viewport } from './ViewportProvider';
+
 type RequiredProps = {
   draw: (CanvasRenderingContext2D, Viewport) => void,
   width: number,
@@ -16,6 +18,7 @@ type RequiredProps = {
   onMouseEnter?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
   onMouseLeave?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
   onMouseDown?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
+  onClick?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
 };
 
 type Props = RequiredProps & {
@@ -50,6 +53,7 @@ class _CanvasInViewport extends React.Component<Props> {
       onMouseEnter,
       onMouseLeave,
       onMouseDown,
+      onClick,
     } = this.props;
 
     const { panX, panY, zoom } = viewport;
@@ -69,6 +73,7 @@ class _CanvasInViewport extends React.Component<Props> {
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onMouseDown={onMouseDown}
+        onClick={onClick}
       />
     );
   }

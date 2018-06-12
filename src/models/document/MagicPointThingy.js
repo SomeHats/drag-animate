@@ -46,7 +46,7 @@ class MagicPointThingy {
 
     const point = keyPoint.findNearest(this.definedKeyPoints);
     invariant(point, 'nearest point must be found');
-    return point;
+    return this.pointsByKeyPointId[String(point.id)];
   }
 
   setAtKeyPoint(keyPoint: Vector2, value: Vector2) {
@@ -55,10 +55,12 @@ class MagicPointThingy {
   }
 
   getAtBasePoint(atPoint: Vector2): Vector2 {
-    return new Vector2(
+    const v = new Vector2(
       this.thinPlateSplinesX.getValue(atPoint),
       this.thinPlateSplinesY.getValue(atPoint)
     );
+    console.log({ atPoint, v });
+    return v;
   }
 }
 

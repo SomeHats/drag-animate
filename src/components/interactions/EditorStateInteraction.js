@@ -21,7 +21,8 @@ class EditorStateInteraction extends React.Component<Props> {
 
     switch (editorState.type) {
       case 'Idle':
-        return <IdleInteraction editor={editor} />;
+        // return <IdleInteraction editor={editor} />;
+        return null;
       case 'CreateShape':
         return (
           <CreateShapeInteraction editorState={editorState} editor={editor} />

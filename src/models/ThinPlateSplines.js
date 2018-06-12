@@ -1,94 +1,130 @@
 // @flow
 import invariant from 'invariant';
 import Vector2 from './Vector2';
-import Matrix from 'sylvester/lib/node-sylvester/matrix';
-import Vector from 'sylvester/lib/node-sylvester/vector';
-global.$V = Vector.create;
+require('sylvester');
 
-const kernel = (a: Vector2, b: Vector2): number => {
-  const r = a.distanceTo(b);
-  if (r === 0) return 0;
-  return Math.pow(r, 2) * Math.log(r);
-};
+var TPS = function() {
+  var centers, ws, ys;
 
-class ThinPlateSplines2 {
-  centers: Vector2[];
-  ws: number[];
-  ys: number[];
-
-  constructor(cents: Vector2[], yVals: number[]) {
-    invariant(cents.length > 0, 'must be at least one center');
-    invariant(
-      cents.length === yVals.length,
-      'must be matching centers and yValues'
-    );
-
-    this.centers = cents.slice();
-    this.ws = [];
-    this.ys = yVals.slice();
-
-    for (let i = this.centers.length; i < 2; i++) {
-      this.centers.push(
-        new Vector2(this.centers[0].x + i, this.centers[0].y + i)
-      );
-      this.ys.push(this.ys[0]);
+  var distance = function(pnt1, pnt2) {
+    var sum = 0;
+    if (!pnt1.length) return Math.sqrt(Math.pow(pnt1 - pnt2, 2));
+    for (var i = 0; i < pnt1.length; i++) {
+      sum += Math.pow(pnt1[i] - pnt2[i], 2);
     }
+    return Math.sqrt(sum);
+  };
 
-    const matrix = [];
-    const P = [];
-    for (let i = 0; i < this.centers.length; i++) {
-      const matRow = [];
-      const pRow = [1, this.centers[i].x, this.centers[i].y];
+  //this is going to be a thin-plate spline
+  //f(x,y) = a1 + a2x + a3y + SUM(wi * kernel())
+  var kernel = function(pnt1, pnt2) {
+    var r = distance(pnt1, pnt2);
+    if (r === 0) return 0;
+    return Math.pow(r, 2) * Math.log(r);
+  };
 
-      for (let j = 0; j < this.centers.length; j++) {
-        matRow.push(kernel(this.centers[i], this.centers[j]));
+  this.compile = function(cents, y_vals) {
+    invariant(cents && cents.length, 'bad centers array :/');
+
+    centers = cents.map(function(curr) {
+      return curr;
+    });
+    ys = y_vals.map(function(curr) {
+      return curr;
+    });
+    var matrix = [],
+      matRow = [];
+    var P = [],
+      pRow = [];
+    for (var i = 0; i < centers.length; i++) {
+      matRow = [];
+      pRow = [1];
+      for (var k = 0; k < centers[i].length; k++) {
+        pRow.push(centers[i][k]);
+      }
+
+      for (var j = 0; j < centers.length; j++) {
+        matRow.push(kernel(centers[i], centers[j]));
       }
       P.push(pRow);
       matrix.push(matRow.concat(pRow));
     }
 
-    const pT = Matrix.create(P).transpose();
+    var pT = global.$M(P).transpose();
 
-    const newRows = pT.elements.map(function(row) {
-      for (let i = row.length; i < matrix[0].length; i++) {
+    var newRows = pT.elements.map(function(row) {
+      for (var i = row.length; i < matrix[0].length; i++) {
         row.push(0);
       }
       return row;
     });
 
-    for (let i = 0; i < newRows.length; i++) {
+    for (var i = 0; i < newRows.length; i++) {
       matrix.push(newRows[i]);
-      this.ys.push(0);
+      ys.push(0);
     }
 
-    this.ws = this._solve(this.ys, matrix);
+    ws = this._solve(ys, matrix);
 
-    invariant(this.ws, 'rbf failed - centers must be unique');
-  }
+    invariant(
+      ws,
+      'rbf failed to compile with given centers./nCenters must be unique :/'
+    );
+  };
 
-  _solve(b: number[], x: number[][]) {
+  this._solve = function(b, x) {
     //a*x = b
     //a = b * x^-1
     //L = [K p]
     //    [pT 0]
     //L (W | a1 a2 a3) = Y
-    let X = Matrix.create(x);
-    let B = Vector.create(b);
+    var X = global.$M(x);
+    var B = global.$V(b);
     X = X.inverse();
-    invariant(X, 'could not invert matrix');
-    return X.multiply(B).elements;
+    if (!X) {
+      return;
+    }
+    return X.multiply(B);
+  };
+
+  this.getValue = function(pnt) {
+    var result = 0,
+      i = 0;
+    for (i = 0; i < centers.length; i++) {
+      result += Number(ws.elements[i]) * kernel(pnt, centers[i]);
+    }
+    result += Number(ws.elements[centers.length]);
+    for (i = 0; i < pnt.length; i++) {
+      result += pnt[i] * Number(ws.elements[centers.length + (i + 1)]);
+    }
+    return result;
+  };
+
+  this.getValues = function(pnts, cb) {
+    setTimeout(
+      function() {
+        var resultArr = pnts.map(function(pnt) {
+          return this.getValue(pnt);
+        }, this);
+        cb(null, { points: pnts, ys: resultArr });
+      }.bind(this),
+      0
+    );
+  };
+};
+
+export default class ThinPlateSplines {
+  tps: TPS = new TPS();
+
+  constructor(centers: Vector2[], values: number[]) {
+    console.log('COMPILE:');
+    console.log(centers.map(({ x, y }) => [x, y]));
+    console.log(values);
+    this.tps.compile(centers.map(({ x, y }) => [x, y]), values);
+    console.log('new tps');
   }
 
-  getValue(pnt: Vector2) {
-    let result = 0;
-    for (let i = 0; i < this.centers.length; i++) {
-      result += Number(this.ws[i]) * kernel(pnt, this.centers[i]);
-    }
-    result += Number(this.ws[this.centers.length]);
-    result += pnt.x * Number(this.ws[this.centers.length + 1]);
-    result += pnt.y * Number(this.ws[this.centers.length + 2]);
-    return result;
+  getValue(point: Vector2) {
+    return this.tps.getValue([point.x, point.y]);
   }
 }
-
-export default ThinPlateSplines2;

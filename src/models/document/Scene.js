@@ -32,7 +32,10 @@ class Scene {
     this.width = width;
     this.height = height;
     this.keyPointSet = new KeyPointSet();
-    this.keyPointSet.addKeyPoint(new Vector2(width / 2, height / 2));
+    this.keyPointSet.addKeyPoint(new Vector2(width * 0.25, height * 0.25));
+    this.keyPointSet.addKeyPoint(new Vector2(width * 0.75, height * 0.25));
+    this.keyPointSet.addKeyPoint(new Vector2(width * 0.75, height * 0.75));
+    this.keyPointSet.addKeyPoint(new Vector2(width * 0.25, height * 0.75));
     return this;
   }
 

@@ -41,7 +41,7 @@ class SelectedShapeInteraction extends React.Component<Props> {
         {shape.points.map(point => (
           <DraggablePoint
             key={String(point.id)}
-            point={point.getAtKeyPoint(viewport.nearestKeyPoint)}
+            point={point}
             color={pink.A400}
             cursor="pointer"
           />

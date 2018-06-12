@@ -4,13 +4,14 @@ import { action } from 'mobx';
 import { observer } from 'mobx-react';
 import PointableCover from '../lib/PointableCover';
 import type Vector2 from '../models/Vector2';
+import type MagicPointThingy from '../models/document/MagicPointThingy';
 import * as PointHelpers from '../canvas/PointHelpers';
 import CanvasInViewport from './lib/CanvasInViewport';
 import { withViewport, type Viewport } from './lib/ViewportProvider';
 
 type Props = {
   color: string,
-  point: Vector2,
+  point: MagicPointThingy,
   cursor?: string,
   viewport: Viewport,
 };
@@ -36,7 +37,7 @@ class DraggablePoint extends React.Component<Props> {
       e.clientY
     );
 
-    this.props.point.set(point);
+    this.props.point.setAtKeyPoint(this.props.viewport.nearestKeyPoint, point);
   });
 
   handleMouseUp = e => {
@@ -51,13 +52,14 @@ class DraggablePoint extends React.Component<Props> {
   };
 
   render() {
-    const { point, cursor } = this.props;
+    const { point, cursor, viewport } = this.props;
+    const { x, y } = point.getAtKeyPoint(viewport.nearestKeyPoint);
     return (
       <CanvasInViewport
         width={15}
         height={15}
-        sceneX={point.x}
-        sceneY={point.y}
+        sceneX={x}
+        sceneY={y}
         draw={this.draw}
         cursor={cursor}
         onMouseDown={this.handleMouseDown}
