@@ -31,7 +31,7 @@ type Props = {
 
 class ShapeDrawer extends React.Component<Props> {
   handleClick = (shape: Shape) => () => {
-    this.props.editor.commands.selectShape(shape);
+    // this.props.editor.commands.selectShape(shape);
   };
 
   render() {
@@ -53,14 +53,14 @@ class ShapeDrawer extends React.Component<Props> {
           ))}
         </List>
 
-        <Button
+        {/* <Button
           onClick={editor.commands.createShape}
           className={classes.addButton}
           variant="fab"
           color="primary"
         >
           <AddIcon />
-        </Button>
+        </Button> */}
       </Drawer>
     );
   }

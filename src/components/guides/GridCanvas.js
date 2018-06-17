@@ -1,44 +1,54 @@
 // @flow
 import React from 'react';
+import amber from '@material-ui/core/colors/amber';
 import ViewportCanvas, { type Viewport } from '../lib/ViewportCanvas';
+import type Vector2 from '../../models/Vector2';
 
 class GridCanvas extends React.Component<{}> {
-  draw = (
-    ctx: CanvasRenderingContext2D,
-    { px, sceneWidth, sceneHeight }: Viewport
-  ) => {
-    this.drawOutline(ctx, px, sceneWidth, sceneHeight);
-    // this.drawGridLines(ctx, px);
+  draw = (ctx: CanvasRenderingContext2D, viewport: Viewport) => {
+    this.drawOutline(ctx, viewport);
+    this.drawBasePoint(ctx, viewport);
   };
 
   drawOutline(
     ctx: CanvasRenderingContext2D,
-    px: number,
-    width: number,
-    height: number
+    { px, sceneWidth, sceneHeight }: Viewport
   ) {
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.lineWidth = px;
-    ctx.strokeRect(0, 0, width, height);
+    ctx.strokeRect(0, 0, sceneWidth, sceneHeight);
   }
 
-  // drawGridLines(ctx: CanvasRenderingContext2D, px: number) {
-  //   const { scene } = this.props;
-  //   ctx.beginPath();
-  //   for (let x = 0; x < scene.xGridLines; x++) {
-  //     const coord = x * scene.width / (scene.xGridLines - 1);
-  //     ctx.moveTo(coord, 0);
-  //     ctx.lineTo(coord, scene.height);
-  //   }
-  //   for (let y = 0; y < scene.yGridLines; y++) {
-  //     const coord = y * scene.height / (scene.yGridLines - 1);
-  //     ctx.moveTo(0, coord);
-  //     ctx.lineTo(scene.width, coord);
-  //   }
-  //   ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-  //   ctx.lineWidth = px;
-  //   ctx.stroke();
-  // }
+  drawBasePoint(
+    ctx: CanvasRenderingContext2D,
+    {
+      basePoint,
+      px,
+      top,
+      left,
+      windowWidth,
+      windowHeight,
+      bottom,
+      right,
+      screenCoordsToSceneCoords,
+    }: Viewport
+  ) {
+    const topLeft = screenCoordsToSceneCoords(left, top);
+    const bottomRight = screenCoordsToSceneCoords(
+      windowWidth - right,
+      windowHeight - bottom
+    );
+
+    ctx.beginPath();
+    ctx.moveTo(topLeft.x, basePoint.y);
+    ctx.lineTo(bottomRight.x, basePoint.y);
+    ctx.moveTo(basePoint.x, topLeft.y);
+    ctx.lineTo(basePoint.x, bottomRight.y);
+
+    ctx.lineWidth = px;
+    ctx.strokeStyle = amber.A400;
+    ctx.stroke();
+  }
 
   render() {
     return <ViewportCanvas draw={this.draw} />;

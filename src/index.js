@@ -15,14 +15,10 @@ const editor = Editor.fromAutoSave(() => new Scene().init(200, 100));
 editor.startAutosaving();
 window.editor = editor;
 
-const viewport = new Viewport(editor);
-viewport.setup();
-window.viewport = viewport;
-
 ReactDOM.render(
   <Fragment>
     <CssBaseline />
-    <App viewport={viewport} />
+    <App editor={editor} />
   </Fragment>,
   root
 );

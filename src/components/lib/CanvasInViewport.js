@@ -56,9 +56,9 @@ class _CanvasInViewport extends React.Component<Props> {
       onClick,
     } = this.props;
 
-    const { panX, panY, zoom } = viewport;
-    const x = sceneX * zoom + panX - width / 2;
-    const y = sceneY * zoom + panY - height / 2 + 64;
+    const { panX, panY, zoom, left, top } = viewport;
+    const x = sceneX * zoom + panX - width / 2 + left;
+    const y = sceneY * zoom + panY - height / 2 + top;
 
     return (
       <Canvas

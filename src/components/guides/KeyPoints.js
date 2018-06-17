@@ -1,16 +1,16 @@
 // @flow
 import React, { Fragment } from 'react';
 import { observer } from 'mobx-react';
-import type Scene from '../../models/document/Scene';
+import { withViewport, type Viewport } from '../lib/ViewportProvider';
 import KeyPoint from './KeyPoint';
 
 type Props = {
-  scene: Scene,
+  viewport: Viewport,
 };
 
 class KeyPoints extends React.Component<Props> {
   render() {
-    const { keyPointSet } = this.props.scene;
+    const { keyPointSet } = this.props.viewport.scene;
     return (
       <Fragment>
         {keyPointSet.keyPoints.map(keyPoint => (
@@ -21,4 +21,4 @@ class KeyPoints extends React.Component<Props> {
   }
 }
 
-export default observer(KeyPoints);
+export default withViewport(observer(KeyPoints));

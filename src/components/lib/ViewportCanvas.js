@@ -2,19 +2,10 @@
 import * as React from 'react';
 import invariant from 'invariant';
 import { observer } from 'mobx-react';
-import { withStyles } from '@material-ui/core/styles';
 import { ViewportConsumer, type Viewport } from './ViewportProvider';
 import Canvas from './Canvas';
 
 export type { Viewport } from './ViewportProvider';
-
-const styles = theme => ({
-  container: {
-    position: 'absolute',
-    top: 64,
-    width: 'calc(100% - 300px)',
-  },
-});
 
 type ViewportMouseEvent = (
   SyntheticMouseEvent<HTMLCanvasElement>,
@@ -34,7 +25,6 @@ type RequiredProps = {
 
 type Props = RequiredProps & {
   viewport: Viewport,
-  classes: { [string]: string },
 };
 
 class _ViewportCanvas extends React.Component<Props, void> {
@@ -70,7 +60,6 @@ class _ViewportCanvas extends React.Component<Props, void> {
 
   render() {
     const {
-      classes,
       viewport,
       cursor,
       canvasRef,
@@ -80,11 +69,15 @@ class _ViewportCanvas extends React.Component<Props, void> {
       onMouseUp,
       onClick,
     } = this.props;
-    const { pxWidth, pxHeight } = viewport;
+    const { pxWidth, pxHeight, left, top } = viewport;
     return (
       <Canvas
-        className={classes.container}
-        style={cursor != null ? { cursor } : undefined}
+        style={{
+          position: 'absolute',
+          left,
+          top,
+          cursor: cursor == null ? undefined : cursor,
+        }}
         draw={this.draw}
         width={pxWidth}
         height={pxHeight}
@@ -99,7 +92,7 @@ class _ViewportCanvas extends React.Component<Props, void> {
   }
 }
 
-const ViewportCanvas = withStyles(styles)(observer(_ViewportCanvas));
+const ViewportCanvas = observer(_ViewportCanvas);
 
 export default (props: RequiredProps) => (
   <ViewportConsumer>

@@ -1721,17 +1721,11 @@ declare module '@material-ui/core/styles/withStyles' {
   declare module.exports: (
     stylesOrCreator: Object,
     options?: Options
-  ) => <
-    OwnProps: {},
-    Props: $Supertype<
-      OwnProps & {
-        classes: { +[string]: string },
-        innerRef: React$Ref<React$ElementType>,
-      }
-    >
-  >(
+  ) => <Props: {}>(
     Component: React$ComponentType<Props>
-  ) => React$ComponentType<OwnProps>;
+  ) => React$ComponentType<
+    $Diff<Props, { classes: { [string]: string } | void }>
+  >;
 }
 
 declare module '@material-ui/core/styles/withTheme' {

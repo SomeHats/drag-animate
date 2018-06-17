@@ -55,7 +55,7 @@ class IdleInteraction extends React.Component<Props> {
     const { editor } = this.props;
     const shapeToSelect = editor.hoveredShapes[0];
     if (shapeToSelect) {
-      editor.commands.selectShape(shapeToSelect);
+      // editor.commands.selectShape(shapeToSelect);
     }
   };
 

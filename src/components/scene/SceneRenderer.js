@@ -1,16 +1,17 @@
 // @flow
 import React, { Fragment } from 'react';
 import { observer } from 'mobx-react';
-import type Scene from '../../models/document/Scene';
+import { withViewport, type Viewport } from '../lib/ViewportProvider';
 import ShapeRenderer from './ShapeRenderer';
 
 type Props = {
-  scene: Scene,
+  viewport: Viewport,
 };
 
 class SceneRenderer extends React.Component<Props> {
   render() {
-    const { scene } = this.props;
+    const { viewport } = this.props;
+    const scene = viewport.editor.scene;
     return (
       <Fragment>
         {scene.shapes.map((shape, i) => (
@@ -21,4 +22,4 @@ class SceneRenderer extends React.Component<Props> {
   }
 }
 
-export default observer(SceneRenderer);
+export default withViewport(observer(SceneRenderer));

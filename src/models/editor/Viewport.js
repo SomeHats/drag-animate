@@ -2,20 +2,22 @@
 import { decorate, observable, computed, action } from 'mobx';
 import invariant from 'invariant';
 import type Editor from './Editor';
+import type Scene from '../document/Scene';
 import Vector2 from '../Vector2';
 
 const MARGIN = 15;
 
 class Viewport {
-  top = 64;
+  top = 0;
   left = 0;
   bottom = 0;
-  right = 300;
+  right = 0;
   windowWidth = window.innerWidth;
   windowHeight = window.innerHeight;
   scale = window.devicePixelRatio || 1;
   editor: Editor;
   basePoint: Vector2 = new Vector2(0, 0);
+  pointer: null | Vector2 = null;
 
   constructor(editor: Editor) {
     this.editor = editor;
@@ -51,14 +53,14 @@ class Viewport {
   get panX(): number {
     const availWidth = this.pxWidth - 2 * MARGIN;
     return this.zoom * this.sceneWidth < availWidth
-      ? MARGIN + (availWidth / 2 - this.zoom * this.sceneWidth / 2)
+      ? MARGIN + (availWidth / 2 - (this.zoom * this.sceneWidth) / 2)
       : MARGIN;
   }
 
   get panY(): number {
     const availHeight = this.pxHeight - 2 * MARGIN;
     return this.zoom * this.sceneHeight < availHeight
-      ? MARGIN + (availHeight / 2 - this.zoom * this.sceneHeight / 2)
+      ? MARGIN + (availHeight / 2 - (this.zoom * this.sceneHeight) / 2)
       : MARGIN;
   }
 
@@ -72,6 +74,10 @@ class Viewport {
     );
     invariant(nearest, 'nearest must be found');
     return nearest;
+  }
+
+  get scene(): Scene {
+    return this.editor.scene;
   }
 
   sceneCoordsToScreenCoords = (x: number, y: number): Vector2 => {
@@ -88,26 +94,35 @@ class Viewport {
     );
   };
 
-  setup() {
-    window.addEventListener('resize', this.onResize);
+  setSize(
+    windowWidth,
+    windowHeight,
+    devicePixelRatio,
+    left,
+    top,
+    right,
+    bottom
+  ) {
+    this.windowWidth = windowWidth;
+    this.windowHeight = windowHeight;
+    this.scale = devicePixelRatio;
+    this.left = left;
+    this.top = top;
+    this.right = right;
+    this.bottom = bottom;
   }
-
-  teardown() {
-    window.removeEventListener('resize', this.onResize);
-  }
-
-  onResize = action(() => {
-    this.windowWidth = window.innerWidth;
-    this.windowHeight = window.innerHeight;
-    this.scale = window.devicePixelRatio || 1;
-  });
 }
 
 export default decorate(Viewport, {
   windowWidth: observable,
   windowHeight: observable,
   scale: observable,
+  top: observable,
+  left: observable,
+  bottom: observable,
+  right: observable,
   editor: observable,
+  pointer: observable,
   sceneWidth: computed,
   sceneHeight: computed,
   pxWidth: computed,
@@ -116,5 +131,7 @@ export default decorate(Viewport, {
   panX: computed,
   panY: computed,
   px: computed,
+  scene: computed,
   nearestKeyPoint: invariant,
+  setSize: action,
 });

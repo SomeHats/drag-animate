@@ -2,14 +2,14 @@
 import { decorate, observable, action, autorun } from 'mobx';
 // import { autorunAsync } from 'mobx-utils';
 import invariant from 'invariant';
-import type { EditorState } from './EditorState';
+import EditorTools, { type EditorTool } from './EditorTools';
 import Scene from '../document/Scene';
 import Shape from '../document/shapes/Shape';
 
 const AUTOSAVE_NAME = 'drag-animate.autosave';
 
 class Editor {
-  state: EditorState = { type: 'Idle' };
+  tool: EditorTool = EditorTools.SELECT;
   scene: Scene;
   // TODO: make this not an array
   hoveredShapes: Shape[] = [];
@@ -54,13 +54,8 @@ class Editor {
     );
   }
 
-  enterState(newState: EditorState) {
-    this.state = newState;
-    this.hoveredShapes = [];
-  }
-
-  clearState() {
-    this.state = { type: 'Idle' };
+  setTool(tool: EditorTool) {
+    this.tool = tool;
   }
 
   setHovers(hoveredShapes: Shape[]) {
@@ -73,28 +68,27 @@ class Editor {
     replaceDocumentWithNew: (width = 200, height = 100) => {
       this.scene = new Scene().init(width, height);
     },
-    createShape: () => {
-      const shape = new Shape();
-      this.scene.addShape(shape);
-      this.enterState({
-        type: 'CreateShape',
-        shape,
-      });
-    },
-    selectShape: (shape: Shape) => {
-      this.enterState({
-        type: 'ShapeSelected',
-        shape,
-      });
-    },
+    // createShape: () => {
+    //   const shape = new Shape();
+    //   this.scene.addShape(shape);
+    //   this.enterState({
+    //     type: 'CreateShape',
+    //     shape,
+    //   });
+    // },
+    // selectShape: (shape: Shape) => {
+    //   this.enterState({
+    //     type: 'ShapeSelected',
+    //     shape,
+    //   });
+    // },
   };
 }
 
 export default decorate(Editor, {
   scene: observable,
-  state: observable,
+  tool: observable,
   hoveredShapes: observable,
-  enterState: action,
-  clearState: action,
+  setTool: action,
   setHovers: action,
 });

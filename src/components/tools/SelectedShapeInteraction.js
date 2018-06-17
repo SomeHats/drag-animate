@@ -30,7 +30,7 @@ class SelectedShapeInteraction extends React.Component<Props> {
   };
 
   handleClick = () => {
-    this.props.editor.clearState();
+    // this.props.editor.clearState();
   };
 
   render() {

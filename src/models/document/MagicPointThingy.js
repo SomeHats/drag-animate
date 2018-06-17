@@ -59,7 +59,6 @@ class MagicPointThingy {
       this.thinPlateSplinesX.getValue(atPoint),
       this.thinPlateSplinesY.getValue(atPoint)
     );
-    console.log({ atPoint, v });
     return v;
   }
 }
