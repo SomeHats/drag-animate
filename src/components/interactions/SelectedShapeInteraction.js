@@ -34,7 +34,7 @@ class SelectedShapeInteraction extends React.Component<Props> {
   };
 
   render() {
-    const { shape, viewport } = this.props;
+    const { shape } = this.props;
     return (
       <Fragment>
         <ViewportCanvas draw={this.drawLine} onClick={this.handleClick} />

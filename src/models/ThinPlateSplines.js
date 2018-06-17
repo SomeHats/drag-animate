@@ -59,7 +59,7 @@ var TPS = function() {
       return row;
     });
 
-    for (var i = 0; i < newRows.length; i++) {
+    for (i = 0; i < newRows.length; i++) {
       matrix.push(newRows[i]);
       ys.push(0);
     }

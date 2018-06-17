@@ -1,5 +1,4 @@
 // @flow
-import invariant from 'invariant';
 import { observable, decorate } from 'mobx';
 import ShapeStyle from '../ShapeStyle';
 import type Vector2 from '../../Vector2';

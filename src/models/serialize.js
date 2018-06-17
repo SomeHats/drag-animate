@@ -112,7 +112,7 @@ const serializeItem = (
 
   const result = {};
   primitives.forEach(key => (result[key] = object[key]));
-  Object.keys(refs).map(key => {
+  Object.keys(refs).forEach(key => {
     result[key] = serializeRef(refs[key], object[key], objectsById);
   });
 
