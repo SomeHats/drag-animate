@@ -1,7 +1,7 @@
 // @flow
 import React, { Fragment } from 'react';
-import ViewportCanvas, { type Viewport } from './lib/ViewportCanvas';
-import ViewportKey from './lib/ViewportKey';
+import ViewportCanvas, { type Viewport } from './viewport/ViewportCanvas';
+import ViewportKey from './viewport/ViewportKey';
 
 class BaseTrackyThing extends React.Component<{}> {
   _unsubscribes = [];

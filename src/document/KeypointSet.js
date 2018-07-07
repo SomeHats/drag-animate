@@ -1,7 +1,7 @@
 // @flow
 import { decorate, observable, computed, action } from 'mobx';
-import { genId, serializable, refObjectMap, type ID } from '../serialize';
-import Vector2 from '../Vector2';
+import { genId, serializable, refObjectMap, type ID } from '../lib/serialize';
+import Vector2 from '../lib/Vector2';
 
 class KeyPointSet {
   id = genId();

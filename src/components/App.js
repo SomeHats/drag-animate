@@ -1,8 +1,8 @@
 // @flow
 import React, { Fragment } from 'react';
 import { observer } from 'mobx-react';
-import type Editor from '../models/editor/Editor';
-import { ViewportProvider } from './lib/ViewportProvider';
+import type Editor from '../editor/Editor';
+import { ViewportProvider } from './viewport/ViewportProvider';
 import HeadBar from './ui/HeadBar';
 import ShapeDrawer from './ui/ShapeDrawer';
 import ToolBox from './ui/ToolBox';

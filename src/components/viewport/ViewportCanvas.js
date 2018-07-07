@@ -2,9 +2,9 @@
 import * as React from 'react';
 import invariant from 'invariant';
 import { observer } from 'mobx-react';
-import type Vector2 from '../../models/Vector2';
+import type Vector2 from '../../lib/Vector2';
 import { ViewportConsumer, type Viewport } from './ViewportProvider';
-import Canvas from './Canvas';
+import Canvas from '../canvas/Canvas';
 
 export type { Viewport } from './ViewportProvider';
 

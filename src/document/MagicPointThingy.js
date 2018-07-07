@@ -1,10 +1,10 @@
 // @flow
 import { decorate, observable, computed, action } from 'mobx';
 import invariant from 'invariant';
-import { genId, serializable, ref, refObjectMap } from '../serialize';
-import Vector2 from '../Vector2';
+import { genId, serializable, ref, refObjectMap } from '../lib/serialize';
+import Vector2 from '../lib/Vector2';
 import KeyPointSet from './KeypointSet';
-import ThinPlateSplines2 from '../ThinPlateSplines';
+import ThinPlateSplines2 from '../lib/ThinPlateSplines';
 
 class MagicPointThingy {
   id = genId();

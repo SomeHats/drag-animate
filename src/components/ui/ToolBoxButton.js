@@ -5,8 +5,8 @@ import { observer } from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import type Editor from '../../models/editor/Editor';
-import { type EditorTool } from '../../models/editor/EditorTools';
+import type Editor from '../../editor/Editor';
+import { type EditorTool } from '../../editor/EditorTools';
 
 type Props = {|
   icon: React.Node,

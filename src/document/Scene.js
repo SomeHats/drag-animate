@@ -9,8 +9,8 @@ import {
   serialize,
   deserialize,
   type Serialization,
-} from '../serialize';
-import Vector2 from '../Vector2';
+} from '../lib/serialize';
+import Vector2 from '../lib/Vector2';
 import Shape from './shapes/Shape';
 import KeyPointSet from './KeypointSet';
 import MagicPointThingy from './MagicPointThingy';

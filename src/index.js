@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 import invariant from 'invariant';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import App from './components/App';
-import Scene from './models/document/Scene';
-import Editor from './models/editor/Editor';
-import keyboard from './models/editor/keyboard';
+import Scene from './document/Scene';
+import Editor from './editor/Editor';
+import keyboard from './editor/keyboard';
 
 keyboard.setup();
 

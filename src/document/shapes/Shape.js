@@ -1,9 +1,9 @@
 // @flow
 import { observable, decorate } from 'mobx';
 import ShapeStyle from '../ShapeStyle';
-import type Vector2 from '../../Vector2';
+import type Vector2 from '../../lib/Vector2';
+import { genId, serializable, ref, refList } from '../../lib/serialize';
 import MagicPointThingy from '../MagicPointThingy';
-import { genId, serializable, ref, refList } from '../../serialize';
 
 class Shape {
   id = genId();

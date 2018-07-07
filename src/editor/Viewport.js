@@ -2,10 +2,10 @@
 import EventEmitter from 'events';
 import { decorate, observable, computed, action } from 'mobx';
 import invariant from 'invariant';
+import type Scene from '../document/Scene';
+import Vector2 from '../lib/Vector2';
 import type Editor from './Editor';
 import type { SelectionItem } from './SelectionItem';
-import type Scene from '../document/Scene';
-import Vector2 from '../Vector2';
 import ViewportPointer from './ViewportPointer';
 import keyboard from './keyboard';
 

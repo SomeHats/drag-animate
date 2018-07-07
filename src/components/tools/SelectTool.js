@@ -3,13 +3,13 @@ import React from 'react';
 import invariant from 'invariant';
 import cyan from '@material-ui/core/colors/cyan';
 import * as PointHelpers from '../../canvas/PointHelpers';
-import type Shape from '../../models/document/shapes/Shape';
+import type Shape from '../../document/shapes/Shape';
 import type {
   SelectionItem,
   ShapeSelectionItem,
   MagicPointThingySelectionItem,
-} from '../../models/editor/SelectionItem';
-import ViewportCanvas, { type Viewport } from '../lib/ViewportCanvas';
+} from '../../editor/SelectionItem';
+import ViewportCanvas, { type Viewport } from '../viewport/ViewportCanvas';
 
 class SelectTool extends React.Component<{}> {
   draw = (ctx: CanvasRenderingContext2D, viewport: Viewport) => {

@@ -1,7 +1,7 @@
 // @flow
 import EventEmitter from 'events';
 import { decorate, observable, computed, action } from 'mobx';
-import Vector2 from '../Vector2';
+import Vector2 from '../lib/Vector2';
 import type Viewport from './Viewport';
 import type { SelectionItem } from './SelectionItem';
 

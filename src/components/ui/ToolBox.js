@@ -7,8 +7,8 @@ import List from '@material-ui/core/List';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
 import CreateIcon from '@material-ui/icons/Create';
 
-import type Editor from '../../models/editor/Editor';
-import EditorTools from '../../models/editor/EditorTools';
+import type Editor from '../../editor/Editor';
+import EditorTools from '../../editor/EditorTools';
 import ToolBoxButton from './ToolBoxButton';
 
 const styles = theme => ({

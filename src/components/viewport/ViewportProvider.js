@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
 import invariant from 'invariant';
-import type Editor from '../../models/editor/Editor';
-import Viewport from '../../models/editor/Viewport';
-export type { default as Viewport } from '../../models/editor/Viewport';
+import type Editor from '../../editor/Editor';
+import Viewport from '../../editor/Viewport';
+export type { default as Viewport } from '../../editor/Viewport';
 
 const { Provider, Consumer } = React.createContext(null);
 

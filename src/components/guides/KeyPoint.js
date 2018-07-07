@@ -2,9 +2,9 @@
 import React from 'react';
 import { action } from 'mobx';
 import { observer } from 'mobx-react';
-import CanvasInViewport from '../lib/CanvasInViewport';
-import { withViewport, type Viewport } from '../lib/ViewportProvider';
-import type Vector2 from '../../models/Vector2';
+import CanvasInViewport from '../viewport/CanvasInViewport';
+import { withViewport, type Viewport } from '../viewport/ViewportProvider';
+import type Vector2 from '../../lib/Vector2';
 
 type Props = {
   keyPoint: Vector2,

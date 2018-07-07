@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import invariant from 'invariant';
 import { withStyles } from '@material-ui/core/styles';
 import { ViewportConsumer, type Viewport } from './ViewportProvider';
-import Canvas from './Canvas';
+import Canvas from '../canvas/Canvas';
 
 export type { Viewport } from './ViewportProvider';
 

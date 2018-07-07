@@ -1,7 +1,7 @@
 // @flow
 import React, { Fragment } from 'react';
 import { observer } from 'mobx-react';
-import { withViewport, type Viewport } from '../lib/ViewportProvider';
+import { withViewport, type Viewport } from '../viewport/ViewportProvider';
 import KeyPoint from './KeyPoint';
 
 type Props = {

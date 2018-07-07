@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import { observer } from 'mobx-react';
-import type Shape from '../../models/document/shapes/Shape';
-import ViewportCanvas, { type Viewport } from '../lib/ViewportCanvas';
+import type Shape from '../../document/shapes/Shape';
+import ViewportCanvas, { type Viewport } from '../viewport/ViewportCanvas';
 
 type Props = {
   shape: Shape,

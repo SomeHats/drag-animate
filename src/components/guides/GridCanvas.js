@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import amber from '@material-ui/core/colors/amber';
-import ViewportCanvas, { type Viewport } from '../lib/ViewportCanvas';
-import type Vector2 from '../../models/Vector2';
+import ViewportCanvas, { type Viewport } from '../viewport/ViewportCanvas';
+import type Vector2 from '../../lib/Vector2';
 
 class GridCanvas extends React.Component<{}> {
   draw = (ctx: CanvasRenderingContext2D, viewport: Viewport) => {

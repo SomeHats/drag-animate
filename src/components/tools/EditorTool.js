@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 import { observer } from 'mobx-react';
-import type Editor from '../../models/editor/Editor';
-import EditorTools from '../../models/editor/EditorTools';
-import { withViewport, type Viewport } from '../lib/ViewportProvider';
+import type Editor from '../../editor/Editor';
+import EditorTools from '../../editor/EditorTools';
+import { withViewport, type Viewport } from '../viewport/ViewportProvider';
 import SelectTool from './SelectTool';
 import PenTool from './PenTool';
 // import CreateShapeInteraction from './CreateShapeInteraction';

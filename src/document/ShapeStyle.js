@@ -1,6 +1,6 @@
 // @flow
 import { decorate, observable } from 'mobx';
-import { genId, serializable } from '../serialize';
+import { genId, serializable } from '../lib/serialize';
 
 class ShapeStyle {
   id = genId();

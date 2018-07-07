@@ -9,8 +9,8 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
-import type Editor from '../../models/editor/Editor';
-import type Shape from '../../models/document/shapes/Shape';
+import type Editor from '../../editor/Editor';
+import type Shape from '../../document/shapes/Shape';
 
 const styles = theme => ({
   drawerPaper: {
