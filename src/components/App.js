@@ -1,7 +1,6 @@
 // @flow
 import React, { Fragment } from 'react';
 import { observer } from 'mobx-react';
-import type Viewport from '../models/editor/Viewport';
 import type Editor from '../models/editor/Editor';
 import { ViewportProvider } from './lib/ViewportProvider';
 import HeadBar from './ui/HeadBar';
@@ -18,7 +17,6 @@ type Props = {| editor: Editor |};
 class App extends React.Component<Props, void> {
   render() {
     const { editor } = this.props;
-    const { scene } = editor;
     return (
       <Fragment>
         <HeadBar />

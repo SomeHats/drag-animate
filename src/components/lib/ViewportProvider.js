@@ -91,14 +91,46 @@ export class ViewportProvider extends React.Component<
     return <Provider value={viewport}>{children}</Provider>;
   }
 
+  handleMouseDown = () => {
+    const { viewport } = this.state;
+    invariant(viewport, 'viewport must exist');
+    viewport.pointer.triggerPointerDown();
+  };
+
+  handleMouseMove = (e: SyntheticMouseEvent<HTMLDivElement>) => {
+    const { viewport } = this.state;
+    invariant(viewport, 'viewport must exist');
+    viewport.pointer.setPosition(e.clientX, e.clientY);
+    viewport.pointer.triggerPointerMove();
+  };
+
+  handleMouseUp = () => {
+    const { viewport } = this.state;
+    invariant(viewport, 'viewport must exist');
+    viewport.pointer.triggerPointerUp();
+  };
+
+  handleMouseLeave = () => {
+    const { viewport } = this.state;
+    invariant(viewport, 'viewport must exist');
+    viewport.pointer.clearPosition();
+  };
+
   render() {
     const { style } = this.props;
     const { viewport } = this.state;
 
     return (
       <React.Fragment>
-        <div ref={this.sizerRef} style={style} />
         {viewport && this.renderViewport(viewport)}
+        <div
+          ref={this.sizerRef}
+          style={style}
+          onMouseDown={this.handleMouseDown}
+          onMouseMove={this.handleMouseMove}
+          onMouseUp={this.handleMouseUp}
+          onMouseLeave={this.handleMouseLeave}
+        />
       </React.Fragment>
     );
   }

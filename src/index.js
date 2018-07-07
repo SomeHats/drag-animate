@@ -6,7 +6,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import App from './components/App';
 import Scene from './models/document/Scene';
 import Editor from './models/editor/Editor';
-import Viewport from './models/editor/Viewport';
+import keyboard from './models/editor/keyboard';
+
+keyboard.setup();
 
 const root = document.getElementById('root');
 invariant(root, 'root must exist');

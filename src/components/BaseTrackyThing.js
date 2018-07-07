@@ -1,23 +1,41 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import ViewportCanvas, { type Viewport } from './lib/ViewportCanvas';
+import ViewportKey from './lib/ViewportKey';
 
 class BaseTrackyThing extends React.Component<{}> {
+  _unsubscribes = [];
   draw = () => {};
 
-  handleMouseMove = (
-    e: SyntheticMouseEvent<HTMLCanvasElement>,
-    viewport: Viewport
-  ) => {
-    if (!e.ctrlKey) return;
-    viewport.basePoint.set(
-      viewport.screenCoordsToSceneCoords(e.clientX, e.clientY)
-    );
+  handlePointerMove = ({ keyboard, pointer, basePoint }: Viewport) => {
+    if (keyboard.isPressed('ctrl') && pointer.scenePosition) {
+      basePoint.set(pointer.scenePosition);
+    }
+  };
+
+  handleCtrlDown = ({ keyboard, pointer, basePoint }: Viewport) => {
+    if (pointer.scenePosition) {
+      basePoint.set(pointer.scenePosition);
+    }
+  };
+
+  handleCtrlUp = ({ basePoint, nearestKeyPoint }: Viewport) => {
+    basePoint.set(nearestKeyPoint);
   };
 
   render() {
     return (
-      <ViewportCanvas draw={this.draw} onMouseMove={this.handleMouseMove} />
+      <Fragment>
+        <ViewportCanvas
+          draw={this.draw}
+          onPointerMove={this.handlePointerMove}
+        />
+        <ViewportKey
+          name="ctrl"
+          onDown={this.handleCtrlDown}
+          onUp={this.handleCtrlUp}
+        />
+      </Fragment>
     );
   }
 }

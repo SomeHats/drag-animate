@@ -12,10 +12,19 @@ class Vector2 {
     this.y = y;
   }
 
+  clone(): Vector2 {
+    return new Vector2(this.x, this.y);
+  }
+
   distanceTo(other: Vector2): number {
     const dx = this.x - other.x;
     const dy = this.y - other.y;
     return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  setXY(x: number, y: number) {
+    this.x = x;
+    this.y = y;
   }
 
   set(other: Vector2) {
@@ -34,6 +43,14 @@ class Vector2 {
       }
     });
     return nearest;
+  }
+
+  add(other: Vector2): Vector2 {
+    return new Vector2(this.x + other.x, this.y + other.y);
+  }
+
+  subtract(other: Vector2): Vector2 {
+    return new Vector2(this.x - other.x, this.y - other.y);
   }
 }
 

@@ -1,13 +1,21 @@
 // @flow
+import EventEmitter from 'events';
 import { decorate, observable, computed, action } from 'mobx';
 import invariant from 'invariant';
 import type Editor from './Editor';
+import type { SelectionItem } from './SelectionItem';
 import type Scene from '../document/Scene';
 import Vector2 from '../Vector2';
+import ViewportPointer from './ViewportPointer';
+import keyboard from './keyboard';
 
 const MARGIN = 15;
 
-class Viewport {
+const testCanvas = document.createElement('canvas');
+const testContext = testCanvas.getContext('2d');
+
+class Viewport extends EventEmitter {
+  keyboard = keyboard;
   top = 0;
   left = 0;
   bottom = 0;
@@ -17,9 +25,10 @@ class Viewport {
   scale = window.devicePixelRatio || 1;
   editor: Editor;
   basePoint: Vector2 = new Vector2(0, 0);
-  pointer: null | Vector2 = null;
+  pointer: ViewportPointer = new ViewportPointer(this);
 
   constructor(editor: Editor) {
+    super();
     this.editor = editor;
     this.basePoint.set(editor.scene.keyPointSet.keyPoints[0]);
   }
@@ -110,6 +119,36 @@ class Viewport {
     this.top = top;
     this.right = right;
     this.bottom = bottom;
+  }
+
+  getItemAtSceneCoord(sceneCoord: Vector2): SelectionItem | null {
+    const selectThreshold = 8 * this.px;
+    testContext.lineWidth = selectThreshold;
+
+    for (const shape of this.editor.scene.shapes) {
+      for (const point of shape.points) {
+        if (
+          sceneCoord.distanceTo(point.getAtBasePoint(this.basePoint)) <
+          selectThreshold
+        ) {
+          return {
+            type: 'MagicPointThingySelectionItem',
+            point: point,
+            inShape: shape,
+          };
+        }
+      }
+
+      const path = shape.getCanvasPathAtBasePoint(this.basePoint);
+      if (testContext.isPointInStroke(path, sceneCoord.x, sceneCoord.y)) {
+        return {
+          type: 'ShapeSelectionItem',
+          shape: shape,
+        };
+      }
+    }
+
+    return null;
   }
 }
 

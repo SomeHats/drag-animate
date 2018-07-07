@@ -117,11 +117,7 @@ export default class ThinPlateSplines {
   tps: TPS = new TPS();
 
   constructor(centers: Vector2[], values: number[]) {
-    console.log('COMPILE:');
-    console.log(centers.map(({ x, y }) => [x, y]));
-    console.log(values);
     this.tps.compile(centers.map(({ x, y }) => [x, y]), values);
-    console.log('new tps');
   }
 
   getValue(point: Vector2) {

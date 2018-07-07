@@ -11,8 +11,6 @@ const AUTOSAVE_NAME = 'drag-animate.autosave';
 class Editor {
   tool: EditorTool = EditorTools.SELECT;
   scene: Scene;
-  // TODO: make this not an array
-  hoveredShapes: Shape[] = [];
 
   static fromAutoSave(fallback: () => Scene) {
     try {
@@ -56,12 +54,6 @@ class Editor {
 
   setTool(tool: EditorTool) {
     this.tool = tool;
-  }
-
-  setHovers(hoveredShapes: Shape[]) {
-    if (this.hoveredShapes.length !== 0 || hoveredShapes.length !== 0) {
-      this.hoveredShapes = hoveredShapes;
-    }
   }
 
   commands = {
