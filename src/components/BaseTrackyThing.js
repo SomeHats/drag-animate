@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
 import ViewportCanvas, { type Viewport } from './viewport/ViewportCanvas';
+import ViewportInteraction from './viewport/ViewportInteraction';
 import ViewportKey from './viewport/ViewportKey';
 
 class BaseTrackyThing extends React.Component<{}> {
   _unsubscribes = [];
-  draw = () => {};
 
   handlePointerMove = ({ keyboard, pointer, basePoint }: Viewport) => {
     if (keyboard.isPressed('ctrl') && pointer.scenePosition) {
@@ -26,10 +26,7 @@ class BaseTrackyThing extends React.Component<{}> {
   render() {
     return (
       <>
-        <ViewportCanvas
-          draw={this.draw}
-          onPointerMove={this.handlePointerMove}
-        />
+        <ViewportInteraction onPointerMove={this.handlePointerMove} />
         <ViewportKey
           name="ctrl"
           onDown={this.handleCtrlDown}

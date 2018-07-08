@@ -10,6 +10,7 @@ import type {
   MagicPointThingySelectionItem,
 } from '../../editor/SelectionItem';
 import ViewportCanvas, { type Viewport } from '../viewport/ViewportCanvas';
+import ViewportInteraction from '../viewport/ViewportInteraction';
 
 class SelectTool extends React.Component<{}> {
   draw = (ctx: CanvasRenderingContext2D, viewport: Viewport) => {
@@ -170,11 +171,13 @@ class SelectTool extends React.Component<{}> {
 
   render() {
     return (
-      <ViewportCanvas
-        draw={this.draw}
-        onClick={this.handleClick}
-        onDragAsync={this.handleDragAsync}
-      />
+      <>
+        <ViewportCanvas draw={this.draw} />
+        <ViewportInteraction
+          onClick={this.handleClick}
+          onDragAsync={this.handleDragAsync}
+        />
+      </>
     );
   }
 }

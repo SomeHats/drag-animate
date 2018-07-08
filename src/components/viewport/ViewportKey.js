@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import withExactProps from '../../lib/withExactProps';
 import { withViewport, type Viewport } from './ViewportProvider';
 
 type Props = {
@@ -47,4 +48,4 @@ class ViewportKey extends React.Component<Props> {
   }
 }
 
-export default withViewport(ViewportKey);
+export default withExactProps(withViewport(ViewportKey));

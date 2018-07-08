@@ -3,12 +3,13 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import invariant from 'invariant';
 import { withStyles } from '@material-ui/core/styles';
-import { ViewportConsumer, type Viewport } from './ViewportProvider';
+import withExactProps from '../../lib/withExactProps';
+import { withViewport, type Viewport } from './ViewportProvider';
 import Canvas from '../canvas/Canvas';
 
 export type { Viewport } from './ViewportProvider';
 
-type RequiredProps = {
+type Props = {
   draw: (CanvasRenderingContext2D, Viewport) => void,
   width: number,
   height: number,
@@ -19,9 +20,6 @@ type RequiredProps = {
   onMouseLeave?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
   onMouseDown?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
   onClick?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
-};
-
-type Props = RequiredProps & {
   viewport: Viewport,
   classes: { [string]: string },
 };
@@ -34,7 +32,7 @@ const styles = {
   },
 };
 
-class _CanvasInViewport extends React.Component<Props> {
+class CanvasInViewport extends React.Component<Props> {
   draw = (ctx: CanvasRenderingContext2D) => {
     const { viewport, width, height, draw } = this.props;
     ctx.translate(width / 2, height / 2);
@@ -79,13 +77,6 @@ class _CanvasInViewport extends React.Component<Props> {
   }
 }
 
-const CanvasInViewport = withStyles(styles)(observer(_CanvasInViewport));
-
-export default (props: $Exact<RequiredProps>) => (
-  <ViewportConsumer>
-    {viewport => {
-      invariant(viewport, 'viewport must be present');
-      return <CanvasInViewport {...props} viewport={viewport} />;
-    }}
-  </ViewportConsumer>
+export default withExactProps(
+  withViewport(withStyles(styles)(observer(CanvasInViewport)))
 );
