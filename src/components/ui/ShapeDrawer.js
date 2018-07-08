@@ -3,12 +3,10 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import AddIcon from '@material-ui/icons/Add';
 import type Editor from '../../editor/Editor';
 import type Shape from '../../document/shapes/Shape';
 
@@ -52,15 +50,6 @@ class ShapeDrawer extends React.Component<Props> {
             </ListItem>
           ))}
         </List>
-
-        {/* <Button
-          onClick={editor.commands.createShape}
-          className={classes.addButton}
-          variant="fab"
-          color="primary"
-        >
-          <AddIcon />
-        </Button> */}
       </Drawer>
     );
   }

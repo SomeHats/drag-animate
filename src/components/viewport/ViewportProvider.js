@@ -115,7 +115,8 @@ export class ViewportProvider extends React.Component<
   };
 
   handleMouseLeave = () => {
-    console.log('mouseleave');
+    // TODO: correctly handle this event when it is fired because the\
+    // PointableCover gets attached for an interaction
     const { viewport } = this.state;
     invariant(viewport, 'viewport must exist');
     viewport.pointer.clearPosition();

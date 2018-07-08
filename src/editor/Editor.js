@@ -4,7 +4,6 @@ import { decorate, observable, action, autorun } from 'mobx';
 import invariant from 'invariant';
 import EditorTools, { type EditorTool } from './EditorTools';
 import Scene from '../document/Scene';
-import Shape from '../document/shapes/Shape';
 
 const AUTOSAVE_NAME = 'drag-animate.autosave';
 
