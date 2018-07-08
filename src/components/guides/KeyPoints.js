@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { observer } from 'mobx-react';
+import withExactProps from '../../lib/withExactProps';
 import { withViewport, type Viewport } from '../viewport/ViewportProvider';
 import KeyPoint from './KeyPoint';
 
@@ -21,4 +22,4 @@ class KeyPoints extends React.Component<Props> {
   }
 }
 
-export default withViewport(observer(KeyPoints));
+export default withExactProps(withViewport(observer(KeyPoints)));

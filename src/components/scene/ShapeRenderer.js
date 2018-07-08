@@ -4,9 +4,9 @@ import { observer } from 'mobx-react';
 import type Shape from '../../document/shapes/Shape';
 import ViewportCanvas, { type Viewport } from '../viewport/ViewportCanvas';
 
-type Props = {
+type Props = {|
   shape: Shape,
-};
+|};
 
 class ShapeRenderer extends React.Component<Props> {
   draw = (ctx: CanvasRenderingContext2D, { basePoint }: Viewport) => {

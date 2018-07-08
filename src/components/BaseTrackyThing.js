@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
-import ViewportCanvas, { type Viewport } from './viewport/ViewportCanvas';
-import ViewportInteraction from './viewport/ViewportInteraction';
+import ViewportInteraction, {
+  type Viewport,
+} from './viewport/ViewportInteraction';
 import ViewportKey from './viewport/ViewportKey';
 
 class BaseTrackyThing extends React.Component<{}> {

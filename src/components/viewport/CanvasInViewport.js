@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { observer } from 'mobx-react';
-import invariant from 'invariant';
 import { withStyles } from '@material-ui/core/styles';
 import withExactProps from '../../lib/withExactProps';
 import { withViewport, type Viewport } from './ViewportProvider';
@@ -15,11 +14,6 @@ type Props = {
   height: number,
   sceneX: number,
   sceneY: number,
-  cursor?: string,
-  onMouseEnter?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
-  onMouseLeave?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
-  onMouseDown?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
-  onClick?: (SyntheticMouseEvent<HTMLCanvasElement>) => mixed,
   viewport: Viewport,
   classes: { [string]: string },
 };
@@ -40,19 +34,7 @@ class CanvasInViewport extends React.Component<Props> {
   };
 
   render() {
-    const {
-      width,
-      height,
-      sceneX,
-      sceneY,
-      viewport,
-      classes,
-      cursor,
-      onMouseEnter,
-      onMouseLeave,
-      onMouseDown,
-      onClick,
-    } = this.props;
+    const { width, height, sceneX, sceneY, viewport, classes } = this.props;
 
     const { panX, panY, zoom, left, top } = viewport;
     const x = sceneX * zoom + panX - width / 2 + left;
@@ -64,14 +46,7 @@ class CanvasInViewport extends React.Component<Props> {
         className={classes.canvas}
         width={width}
         height={height}
-        style={{
-          transform: `translate(${x}px, ${y}px)`,
-          cursor: cursor,
-        }}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        onMouseDown={onMouseDown}
-        onClick={onClick}
+        style={{ transform: `translate(${x}px, ${y}px)` }}
       />
     );
   }

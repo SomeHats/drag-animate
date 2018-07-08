@@ -7,6 +7,7 @@ import List from '@material-ui/core/List';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
 import CreateIcon from '@material-ui/icons/Create';
 
+import withExactProps from '../../lib/withExactProps';
 import type Editor from '../../editor/Editor';
 import EditorTools from '../../editor/EditorTools';
 import ToolBoxButton from './ToolBoxButton';
@@ -50,4 +51,4 @@ class ToolBox extends React.Component<Props> {
   }
 }
 
-export default withStyles(styles)(observer(ToolBox));
+export default withExactProps(withStyles(styles)(observer(ToolBox)));

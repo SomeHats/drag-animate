@@ -1,15 +1,11 @@
 // @flow
 import * as React from 'react';
-import invariant from 'invariant';
 import { observer } from 'mobx-react';
-import type Vector2 from '../../lib/Vector2';
 import withExactProps from '../../lib/withExactProps';
 import { withViewport, type Viewport } from './ViewportProvider';
 import Canvas from '../canvas/Canvas';
 
 export type { Viewport } from './ViewportProvider';
-
-type ViewportMouseEvent = Viewport => mixed;
 
 type Props = {
   draw: (CanvasRenderingContext2D, Viewport) => void,

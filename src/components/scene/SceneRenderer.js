@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { observer } from 'mobx-react';
+import withExactProps from '../../lib/withExactProps';
 import { withViewport, type Viewport } from '../viewport/ViewportProvider';
 import ShapeRenderer from './ShapeRenderer';
 
@@ -22,4 +23,4 @@ class SceneRenderer extends React.Component<Props> {
   }
 }
 
-export default withViewport(observer(SceneRenderer));
+export default withExactProps(withViewport(observer(SceneRenderer)));

@@ -11,9 +11,9 @@ const styles = theme => ({
   },
 });
 
-type Props = {
+type Props = {|
   classes: { [string]: string },
-};
+|};
 
 const HeadBar = ({ classes }: Props) => (
   <AppBar position="absolute" className={classes.appBar}>

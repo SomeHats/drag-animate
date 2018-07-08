@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { observer } from 'mobx-react';
+import withExactProps from '../../lib/withExactProps';
 import { withViewport, type Viewport } from '../viewport/ViewportProvider';
 import SelectTool from './SelectTool';
 import PenTool from './PenTool';
@@ -25,4 +26,4 @@ class EditorStateInteraction extends React.Component<Props> {
   }
 }
 
-export default withViewport(observer(EditorStateInteraction));
+export default withExactProps(withViewport(observer(EditorStateInteraction)));

@@ -7,8 +7,8 @@ import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import withExactProps from '../../lib/withExactProps';
 import type Editor from '../../editor/Editor';
-import type Shape from '../../document/shapes/Shape';
 
 const styles = theme => ({
   drawerPaper: {
@@ -28,10 +28,6 @@ type Props = {
 };
 
 class ShapeDrawer extends React.Component<Props> {
-  handleClick = (shape: Shape) => () => {
-    // this.props.editor.commands.selectShape(shape);
-  };
-
   render() {
     const { classes, editor } = this.props;
     return (
@@ -43,7 +39,7 @@ class ShapeDrawer extends React.Component<Props> {
         <div className={classes.toolbar} />
         <List subheader={<ListSubheader>Shapes</ListSubheader>}>
           {editor.scene.shapes.map((shape, i) => (
-            <ListItem key={i} button onClick={this.handleClick(shape)}>
+            <ListItem key={i} button>
               <ListItemText>
                 <pre>{JSON.stringify(shape, null, 2)}</pre>
               </ListItemText>
@@ -55,4 +51,4 @@ class ShapeDrawer extends React.Component<Props> {
   }
 }
 
-export default withStyles(styles)(observer(ShapeDrawer));
+export default withExactProps(withStyles(styles)(observer(ShapeDrawer)));
