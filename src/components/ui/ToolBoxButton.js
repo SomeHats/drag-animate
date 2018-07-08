@@ -5,10 +5,14 @@ import { observer } from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Tooltip from '@material-ui/core/Tooltip';
 import type Editor from '../../editor/Editor';
 import { type EditorTool } from '../../editor/EditorTools';
+import KeyboardShortcut from '../KeyboardShortcut';
 
 type Props = {|
+  name: string,
+  shortcutKey: string,
   icon: React.Node,
   editor: Editor,
   tool: EditorTool,
@@ -25,6 +29,9 @@ const styles = theme => ({
   inactive: {
     color: theme.palette.text.primary,
   },
+  popper: {
+    marginLeft: 40,
+  },
 });
 
 class ToolBoxButton extends React.Component<Props> {
@@ -34,27 +41,35 @@ class ToolBoxButton extends React.Component<Props> {
   };
 
   render() {
-    const { tool, editor, icon, classes } = this.props;
-    console.log({ classes });
+    const { name, shortcutKey, tool, editor, icon, classes } = this.props;
 
     return (
-      <ListItem
-        button
-        classes={{
-          root: cx(classes.listItem, {
-            [classes.active]: tool === editor.tool,
-          }),
-        }}
-        onClick={this.handleClick}
-      >
-        <ListItemIcon
-          classes={{
-            root: tool === editor.tool ? classes.active : classes.inactive,
-          }}
+      <>
+        <KeyboardShortcut name={shortcutKey} onDown={this.handleClick} />
+        <Tooltip
+          title={`${name} (${shortcutKey.toUpperCase()})`}
+          placement="right"
+          classes={{ popper: classes.popper }}
         >
-          {icon}
-        </ListItemIcon>
-      </ListItem>
+          <ListItem
+            button
+            classes={{
+              root: cx(classes.listItem, {
+                [classes.active]: tool === editor.tool,
+              }),
+            }}
+            onClick={this.handleClick}
+          >
+            <ListItemIcon
+              classes={{
+                root: tool === editor.tool ? classes.active : classes.inactive,
+              }}
+            >
+              {icon}
+            </ListItemIcon>
+          </ListItem>
+        </Tooltip>
+      </>
     );
   }
 }

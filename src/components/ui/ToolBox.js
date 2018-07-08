@@ -36,11 +36,15 @@ class ToolBox extends React.Component<Props> {
         <div className={classes.toolbar} />
         <List>
           <ToolBoxButton
+            name="Select"
+            shortcutKey="v"
             tool={EditorTools.SELECT}
             icon={<TouchAppIcon />}
             editor={editor}
           />
           <ToolBoxButton
+            name="Pen"
+            shortcutKey="p"
             tool={EditorTools.PEN}
             icon={<CreateIcon />}
             editor={editor}

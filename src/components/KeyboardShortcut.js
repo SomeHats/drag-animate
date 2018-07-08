@@ -1,17 +1,18 @@
 // @flow
 import React from 'react';
-import withExactProps from '../../lib/withExactProps';
-import { withViewport, type Viewport } from './ViewportProvider';
+import withExactProps from '../lib/withExactProps';
+import keyboard from '../editor/keyboard';
 
+export type Keyboard = typeof keyboard;
 type Props = {
   name: string,
-  viewport: Viewport,
-  onDown?: Viewport => void,
-  onUp?: Viewport => void,
+  onDown?: Keyboard => void,
+  onUp?: Keyboard => void,
 };
 
-class ViewportKey extends React.Component<Props> {
+class KeyboardShortcut extends React.Component<Props> {
   _unsubscribes = [];
+
   componentDidMount() {
     this.listen();
   }
@@ -24,8 +25,7 @@ class ViewportKey extends React.Component<Props> {
   }
 
   listen() {
-    const { name, viewport } = this.props;
-    const { keyboard } = viewport;
+    const { name } = this.props;
     this._unsubscribes.push(keyboard.onKeyDown(name, this.handleKeyDown));
     this._unsubscribes.push(keyboard.onKeyUp(name, this.handleKeyUp));
   }
@@ -36,11 +36,11 @@ class ViewportKey extends React.Component<Props> {
   }
 
   handleKeyDown = () => {
-    if (this.props.onDown) this.props.onDown(this.props.viewport);
+    if (this.props.onDown) this.props.onDown(keyboard);
   };
 
   handleKeyUp = () => {
-    if (this.props.onUp) this.props.onUp(this.props.viewport);
+    if (this.props.onUp) this.props.onUp(keyboard);
   };
 
   render() {
@@ -48,4 +48,4 @@ class ViewportKey extends React.Component<Props> {
   }
 }
 
-export default withExactProps(withViewport(ViewportKey));
+export default KeyboardShortcut;

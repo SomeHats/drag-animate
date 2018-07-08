@@ -1,11 +1,17 @@
 // @flow
 import React from 'react';
+import withExactProps from '../lib/withExactProps';
 import ViewportInteraction, {
   type Viewport,
 } from './viewport/ViewportInteraction';
-import ViewportKey from './viewport/ViewportKey';
+import { withViewport } from './viewport/ViewportProvider';
+import KeyboardShortcut from './KeyboardShortcut';
 
-class BaseTrackyThing extends React.Component<{}> {
+type Props = {
+  viewport: Viewport,
+};
+
+class BaseTrackyThing extends React.Component<Props> {
   _unsubscribes = [];
 
   handlePointerMove = ({ keyboard, pointer, basePoint }: Viewport) => {
@@ -14,13 +20,15 @@ class BaseTrackyThing extends React.Component<{}> {
     }
   };
 
-  handleCtrlDown = ({ keyboard, pointer, basePoint }: Viewport) => {
+  handleCtrlDown = () => {
+    const { pointer, basePoint } = this.props.viewport;
     if (pointer.scenePosition) {
       basePoint.set(pointer.scenePosition);
     }
   };
 
-  handleCtrlUp = ({ basePoint, nearestKeyPoint }: Viewport) => {
+  handleCtrlUp = () => {
+    const { basePoint, nearestKeyPoint } = this.props.viewport;
     basePoint.set(nearestKeyPoint);
   };
 
@@ -28,7 +36,7 @@ class BaseTrackyThing extends React.Component<{}> {
     return (
       <>
         <ViewportInteraction onPointerMove={this.handlePointerMove} />
-        <ViewportKey
+        <KeyboardShortcut
           name="ctrl"
           onDown={this.handleCtrlDown}
           onUp={this.handleCtrlUp}
@@ -38,4 +46,4 @@ class BaseTrackyThing extends React.Component<{}> {
   }
 }
 
-export default BaseTrackyThing;
+export default withExactProps(withViewport(BaseTrackyThing));
