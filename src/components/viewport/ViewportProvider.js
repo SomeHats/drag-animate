@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import invariant from 'invariant';
+import PointableCover from '../../lib/PointableCover';
 import type Editor from '../../editor/Editor';
 import Viewport from '../../editor/Viewport';
 export type { default as Viewport } from '../../editor/Viewport';
@@ -39,8 +40,15 @@ export class ViewportProvider extends React.Component<
   };
 
   sizer: HTMLDivElement | null = null;
+  pointableCover: PointableCover;
 
   componentDidMount() {
+    this.pointableCover = new PointableCover({
+      down: this.handleMouseDown,
+      move: this.handleMouseMove,
+      up: this.handleMouseUp,
+    });
+
     const viewport = new Viewport(this.props.editor);
     this.setState({ viewport });
     this.setViewportSize(viewport);
@@ -52,6 +60,7 @@ export class ViewportProvider extends React.Component<
   }
 
   componentWillUnmount() {
+    this.pointableCover.remove();
     window.removeEventListener('resize', this.handleResize);
   }
 
@@ -94,10 +103,11 @@ export class ViewportProvider extends React.Component<
   handleMouseDown = () => {
     const { viewport } = this.state;
     invariant(viewport, 'viewport must exist');
+    this.pointableCover.attach();
     viewport.pointer.triggerPointerDown();
   };
 
-  handleMouseMove = (e: SyntheticMouseEvent<HTMLDivElement>) => {
+  handleMouseMove = (e: MouseEvent) => {
     const { viewport } = this.state;
     invariant(viewport, 'viewport must exist');
     viewport.pointer.setPosition(e.clientX, e.clientY);
@@ -107,10 +117,12 @@ export class ViewportProvider extends React.Component<
   handleMouseUp = () => {
     const { viewport } = this.state;
     invariant(viewport, 'viewport must exist');
+    this.pointableCover.remove();
     viewport.pointer.triggerPointerUp();
   };
 
   handleMouseLeave = () => {
+    console.log('mouseleave');
     const { viewport } = this.state;
     invariant(viewport, 'viewport must exist');
     viewport.pointer.clearPosition();
