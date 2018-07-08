@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import { withViewport, type Viewport } from '../viewport/ViewportProvider';
 import ShapeRenderer from './ShapeRenderer';
@@ -13,11 +13,11 @@ class SceneRenderer extends React.Component<Props> {
     const { viewport } = this.props;
     const scene = viewport.editor.scene;
     return (
-      <Fragment>
+      <>
         {scene.shapes.map((shape, i) => (
           <ShapeRenderer shape={shape} key={i} />
         ))}
-      </Fragment>
+      </>
     );
   }
 }

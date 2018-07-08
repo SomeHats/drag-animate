@@ -93,13 +93,6 @@ export class ViewportProvider extends React.Component<
     this.sizer = el;
   };
 
-  renderViewport(viewport: Viewport) {
-    const { children, editor } = this.props;
-    invariant(viewport.editor === editor, 'prop editor must not change');
-
-    return <Provider value={viewport}>{children}</Provider>;
-  }
-
   handleMouseDown = () => {
     const { viewport } = this.state;
     invariant(viewport, 'viewport must exist');
@@ -128,13 +121,24 @@ export class ViewportProvider extends React.Component<
     viewport.pointer.clearPosition();
   };
 
+  renderViewport(viewport: Viewport) {
+    const { children, editor } = this.props;
+    invariant(viewport.editor === editor, 'prop editor must not change');
+
+    return <Provider value={viewport}>{children}</Provider>;
+  }
+
   render() {
-    const { style } = this.props;
+    const { style, children, editor } = this.props;
     const { viewport } = this.state;
 
+    if (viewport) {
+      invariant(viewport.editor === editor, 'prop editor must not change');
+    }
+
     return (
-      <React.Fragment>
-        {viewport && this.renderViewport(viewport)}
+      <>
+        {viewport && <Provider value={viewport}>{children}</Provider>}
         <div
           ref={this.sizerRef}
           style={style}
@@ -143,7 +147,7 @@ export class ViewportProvider extends React.Component<
           onMouseUp={this.handleMouseUp}
           onMouseLeave={this.handleMouseLeave}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

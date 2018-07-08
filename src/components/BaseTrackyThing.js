@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import ViewportCanvas, { type Viewport } from './viewport/ViewportCanvas';
 import ViewportKey from './viewport/ViewportKey';
 
@@ -25,7 +25,7 @@ class BaseTrackyThing extends React.Component<{}> {
 
   render() {
     return (
-      <Fragment>
+      <>
         <ViewportCanvas
           draw={this.draw}
           onPointerMove={this.handlePointerMove}
@@ -35,7 +35,7 @@ class BaseTrackyThing extends React.Component<{}> {
           onDown={this.handleCtrlDown}
           onUp={this.handleCtrlUp}
         />
-      </Fragment>
+      </>
     );
   }
 }

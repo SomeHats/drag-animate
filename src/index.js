@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import invariant from 'invariant';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,9 +18,9 @@ editor.startAutosaving();
 window.editor = editor;
 
 ReactDOM.render(
-  <Fragment>
+  <>
     <CssBaseline />
     <App editor={editor} />
-  </Fragment>,
+  </>,
   root
 );

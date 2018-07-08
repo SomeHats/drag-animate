@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import type Editor from '../editor/Editor';
 import { ViewportProvider } from './viewport/ViewportProvider';
@@ -18,7 +18,7 @@ class App extends React.Component<Props, void> {
   render() {
     const { editor } = this.props;
     return (
-      <Fragment>
+      <>
         <HeadBar />
         <ToolBox editor={editor} />
         <ShapeDrawer editor={editor} />
@@ -38,7 +38,7 @@ class App extends React.Component<Props, void> {
           <KeyPoints />
           <EditorTool />
         </ViewportProvider>
-      </Fragment>
+      </>
     );
   }
 }
