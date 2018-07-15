@@ -1,17 +1,19 @@
 // @flow
 import { observable, decorate } from 'mobx';
-import ShapeStyle from '../ShapeStyle';
 import type Vector2 from '../../lib/Vector2';
 import { genId, serializable, ref, refList } from '../../lib/serialize';
+import { getShapePath } from '../../lib/CanvasHelpers';
+import ShapeStyle from '../ShapeStyle';
 import MagicPointThingy from '../MagicPointThingy';
+import ShapePoint from './ShapePoint';
 
 class Shape {
   id = genId();
   style: ShapeStyle = new ShapeStyle();
-  points: MagicPointThingy[] = [];
+  points: ShapePoint[] = [];
   isClosed: boolean = false;
 
-  addPoint(point: MagicPointThingy) {
+  addPoint(point: ShapePoint) {
     this.points.push(point);
   }
 
@@ -20,17 +22,7 @@ class Shape {
   }
 
   getCanvasPathAtBasePoint(basePoint: Vector2): Path2D {
-    const path = new Path2D();
-    this.points.forEach((point, i) => {
-      const { x, y } = point.getAtBasePoint(basePoint);
-      if (i === 0) {
-        path.moveTo(x, y);
-      } else {
-        path.lineTo(x, y);
-      }
-    });
-    if (this.isClosed) path.closePath();
-    return path;
+    return getShapePath(this.points, basePoint, this.isClosed);
   }
 
   drawToCanvasAtBasePoint(ctx: CanvasRenderingContext2D, basePoint: Vector2) {

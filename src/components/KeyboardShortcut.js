@@ -1,14 +1,14 @@
 // @flow
 import React from 'react';
-import withExactProps from '../lib/withExactProps';
 import keyboard from '../editor/keyboard';
 
 export type Keyboard = typeof keyboard;
-type Props = {
+
+type Props = {|
   name: string,
   onDown?: Keyboard => void,
   onUp?: Keyboard => void,
-};
+|};
 
 class KeyboardShortcut extends React.Component<Props> {
   _unsubscribes = [];

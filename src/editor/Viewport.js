@@ -128,8 +128,9 @@ class Viewport extends EventEmitter {
     for (const shape of this.editor.scene.shapes) {
       for (const point of shape.points) {
         if (
-          sceneCoord.distanceTo(point.getAtBasePoint(this.basePoint)) <
-          selectThreshold
+          sceneCoord.distanceTo(
+            point.originPoint.getAtBasePoint(this.basePoint)
+          ) < selectThreshold
         ) {
           return {
             type: 'MagicPointThingySelectionItem',

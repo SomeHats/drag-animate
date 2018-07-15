@@ -47,7 +47,7 @@ class Editor {
           console.warn(`couldnt autosave: ${e.message}`);
         }
       },
-      { delay: 500 }
+      { delay: 2500 }
     );
   }
 

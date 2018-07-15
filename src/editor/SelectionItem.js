@@ -1,6 +1,6 @@
 // @flow
 import type Shape from '../document/shapes/Shape';
-import type MagicPointThingy from '../document/MagicPointThingy';
+import type ShapePoint from '../document/shapes/ShapePoint';
 
 export type ShapeSelectionItem = {
   +type: 'ShapeSelectionItem',
@@ -9,7 +9,7 @@ export type ShapeSelectionItem = {
 
 export type MagicPointThingySelectionItem = {
   +type: 'MagicPointThingySelectionItem',
-  +point: MagicPointThingy,
+  +point: ShapePoint,
   +inShape: Shape,
 };
 

@@ -92,6 +92,7 @@ const serializeRef = (
   value: any,
   objectsById: { [ScopedId]: Object }
 ): any => {
+  if (value === null) return null;
   switch (ref.type) {
     case 'one':
       return serializeSingleRef(value, objectsById);
@@ -184,6 +185,7 @@ const deserializeRef = (
   objectsById: { [ScopedId]: Object },
   resultCache: { [ScopedId]: Serializable } = {}
 ) => {
+  if (value === null) return null;
   switch (ref.type) {
     case 'one':
       return deserializeItem(objectsById, value, resultCache);

@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import invariant from 'invariant';
+import reactDisplayName from 'react-display-name';
 import PointableCover from '../../lib/PointableCover';
 import type Editor from '../../editor/Editor';
 import Viewport from '../../editor/Viewport';
@@ -41,6 +42,7 @@ export class ViewportProvider extends React.Component<
 
   sizer: HTMLDivElement | null = null;
   pointableCover: PointableCover;
+  isPointerDown: boolean = false;
 
   componentDidMount() {
     this.pointableCover = new PointableCover({
@@ -96,6 +98,7 @@ export class ViewportProvider extends React.Component<
   handleMouseDown = () => {
     const { viewport } = this.state;
     invariant(viewport, 'viewport must exist');
+    this.isPointerDown = true;
     this.pointableCover.attach();
     viewport.pointer.triggerPointerDown();
   };
@@ -110,16 +113,32 @@ export class ViewportProvider extends React.Component<
   handleMouseUp = () => {
     const { viewport } = this.state;
     invariant(viewport, 'viewport must exist');
+    this.isPointerDown = false;
     this.pointableCover.remove();
     viewport.pointer.triggerPointerUp();
+
+    const screenPosition = viewport.pointer.screenPosition;
+    invariant(screenPosition, 'viewport pointer must be active');
+    if (
+      viewport.left > screenPosition.x ||
+      screenPosition.x > viewport.windowWidth - viewport.right ||
+      viewport.top > screenPosition.y ||
+      screenPosition.y > viewport.windowHeight - viewport.bottom
+    ) {
+      // we've left the viewport now, so lets deactivate the viewport pointer
+      viewport.pointer.clearPosition();
+    }
   };
 
   handleMouseLeave = () => {
-    // TODO: correctly handle this event when it is fired because the\
-    // PointableCover gets attached for an interaction
     const { viewport } = this.state;
     invariant(viewport, 'viewport must exist');
-    viewport.pointer.clearPosition();
+
+    // if the pointer's down, the mouseleave event is because of the
+    // PointableCover getting attached over the document
+    if (!this.isPointerDown) {
+      viewport.pointer.clearPosition();
+    }
   };
 
   renderViewport(viewport: Viewport) {
@@ -155,10 +174,14 @@ export class ViewportProvider extends React.Component<
 
 export const withViewport = <Props: {}>(
   Component: React.ComponentType<Props>
-): React.ComponentType<
-  $Diff<Props, { viewport: Viewport | void }>
-> => props => (
-  <ViewportConsumer>
-    {viewport => <Component {...props} viewport={viewport} />}
-  </ViewportConsumer>
-);
+): React.ComponentType<$Diff<Props, { viewport: Viewport | void }>> =>
+  class extends React.Component<Props> {
+    static displayName = `withViewport(${reactDisplayName(Component)})`;
+    render() {
+      return (
+        <ViewportConsumer>
+          {viewport => <Component {...this.props} viewport={viewport} />}
+        </ViewportConsumer>
+      );
+    }
+  };

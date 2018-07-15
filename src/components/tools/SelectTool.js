@@ -2,7 +2,7 @@
 import React from 'react';
 import invariant from 'invariant';
 import cyan from '@material-ui/core/colors/cyan';
-import * as PointHelpers from '../../canvas/PointHelpers';
+import * as CanvasHelpers from '../../lib/CanvasHelpers';
 import type Shape from '../../document/shapes/Shape';
 import type {
   SelectionItem,
@@ -65,7 +65,11 @@ class SelectTool extends React.Component<{}> {
     ctx.beginPath();
     ctx.fillStyle = color;
     const { px, basePoint } = viewport;
-    PointHelpers.square(ctx, point.getAtBasePoint(basePoint), 5 * px);
+    CanvasHelpers.squarePointPath(
+      ctx,
+      point.originPoint.getAtBasePoint(basePoint),
+      5 * px
+    );
     ctx.fill();
   }
 
@@ -86,14 +90,15 @@ class SelectTool extends React.Component<{}> {
     color: string,
     { px, basePoint }: Viewport
   ) {
-    ctx.beginPath();
+    ctx.lineWidth = px;
+    ctx.strokeStyle = color;
     shape.points.forEach(point => {
-      PointHelpers.square(ctx, point.getAtBasePoint(basePoint), 5 * px);
+      CanvasHelpers.drawSquarePointOutline(
+        ctx,
+        point.originPoint.getAtBasePoint(basePoint),
+        5 * px
+      );
     });
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.fill();
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.stroke();
   }
 
   handleClick = (viewport: Viewport) => {
@@ -137,10 +142,14 @@ class SelectTool extends React.Component<{}> {
     hasNextDragPosition: () => Promise<boolean>
   ): Promise<void> {
     if (await isClick) return;
+
     while (await hasNextDragPosition()) {
       const scenePosition = viewport.pointer.scenePosition;
       if (scenePosition) {
-        selection.point.setAtKeyPoint(viewport.nearestKeyPoint, scenePosition);
+        selection.point.originPoint.setAtKeyPoint(
+          viewport.nearestKeyPoint,
+          scenePosition
+        );
       }
     }
   }
@@ -153,15 +162,18 @@ class SelectTool extends React.Component<{}> {
   ): Promise<void> {
     let lastPosition = viewport.pointer.scenePosition;
     invariant(lastPosition, 'viewport pointer must be active');
+
+    if (await isClick) return;
+
     while (await hasNextDragPosition()) {
       const newPosition = viewport.pointer.scenePosition;
       invariant(newPosition, 'viewport pointer must be active');
 
       const offset = newPosition.subtract(lastPosition);
       selection.shape.points.forEach(point => {
-        point.setAtKeyPoint(
+        point.originPoint.setAtKeyPoint(
           viewport.nearestKeyPoint,
-          point.getAtKeyPoint(viewport.nearestKeyPoint).add(offset)
+          point.originPoint.getAtKeyPoint(viewport.nearestKeyPoint).add(offset)
         );
       });
 
