@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "9"
 before_deploy:
-  - npm run build
+  - CI="" npm run build
 deploy:
   provider: pages
   skip-cleanup: true
