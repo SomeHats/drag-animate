@@ -30,5 +30,6 @@
     ">1%",
     "not op_mini all",
     "not ie 11"
-  ]
+  ],
+  "homepage": "."
 }
