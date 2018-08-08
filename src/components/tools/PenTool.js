@@ -6,7 +6,6 @@ import { observer } from 'mobx-react';
 import purple from '@material-ui/core/colors/purple';
 import Shape from '../../document/shapes/Shape';
 import ShapePoint from '../../document/shapes/ShapePoint';
-import MagicPointThingy from '../../document/MagicPointThingy';
 import { withViewport, type Viewport } from '../viewport/ViewportProvider';
 import ViewportCanvas from '../viewport/ViewportCanvas';
 import ViewportInteraction from '../viewport/ViewportInteraction';
@@ -75,7 +74,6 @@ class PenTool extends React.Component<Props> {
       pointer,
       editor,
       nearestKeyPoint,
-      sceneCoordsToScreenCoords,
     } = this.props.viewport;
     const { targetShape } = this.liveState;
 
