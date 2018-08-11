@@ -1,10 +1,10 @@
 // @flow
-import Vector2 from './Vector2';
-import ShapePoint from '../document/shapes/ShapePoint';
+import Vector2 from "./Vector2";
+import ShapePoint from "../document/shapes/ShapePoint";
 
 type Point = {
   x: number,
-  y: number,
+  y: number
 };
 
 export const squarePointPath = (
@@ -27,9 +27,9 @@ export const drawSquarePointOutline = (
 ) => {
   ctx.beginPath();
   squarePointPath(ctx, point, size);
-  ctx.globalCompositeOperation = 'destination-out';
+  ctx.globalCompositeOperation = "destination-out";
   ctx.fill();
-  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalCompositeOperation = "source-over";
   ctx.stroke();
 };
 
@@ -44,7 +44,23 @@ export const getShapePath = (
     if (i === 0) {
       path.moveTo(x, y);
     } else {
-      path.lineTo(x, y);
+      const prevPoint = points[i - 1];
+      const prevControlPoint = prevPoint.leadingControlPointGlobal;
+      const currControlPoint = point.followingControlPointGlobal;
+
+      if (prevControlPoint && currControlPoint) {
+        const { x: cp1x, y: cp1y } = prevControlPoint.getAtBasePoint(basePoint);
+        const { x: cp2x, y: cp2y } = currControlPoint.getAtBasePoint(basePoint);
+        path.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+      } else if (prevControlPoint) {
+        const { x: cpx, y: cpy } = prevControlPoint.getAtBasePoint(basePoint);
+        path.quadraticCurveTo(cpx, cpy, x, y);
+      } else if (currControlPoint) {
+        const { x: cpx, y: cpy } = currControlPoint.getAtBasePoint(basePoint);
+        path.quadraticCurveTo(cpx, cpy, x, y);
+      } else {
+        path.lineTo(x, y);
+      }
     }
   });
   if (isClosed) path.closePath();

@@ -1,6 +1,6 @@
 // @flow
-import { decorate, observable } from 'mobx';
-import { genId, serializable } from './serialize';
+import { decorate, observable } from "mobx";
+import { genId, serializable } from "./serialize";
 
 class Vector2 {
   id = genId();
@@ -52,13 +52,17 @@ class Vector2 {
   subtract(other: Vector2): Vector2 {
     return new Vector2(this.x - other.x, this.y - other.y);
   }
+
+  scale(amt: number): Vector2 {
+    return new Vector2(this.x * amt, this.y * amt);
+  }
 }
 
-serializable(Vector2, 'Vector2', ['x', 'y']);
+serializable(Vector2, "Vector2", ["x", "y"]);
 
 decorate(Vector2, {
   x: observable,
-  y: observable,
+  y: observable
 });
 
 export default Vector2;
