@@ -39,30 +39,40 @@ export const getShapePath = (
   isClosed: boolean
 ) => {
   const path = new Path2D();
-  points.forEach((point, i) => {
+
+  const addLineSegment = (prevPoint, point) => {
     const { x, y } = point.originPoint.getAtBasePoint(basePoint);
+    const prevControlPoint = prevPoint.leadingControlPointGlobal;
+    const currControlPoint = point.followingControlPointGlobal;
+
+    if (prevControlPoint && currControlPoint) {
+      const { x: cp1x, y: cp1y } = prevControlPoint.getAtBasePoint(basePoint);
+      const { x: cp2x, y: cp2y } = currControlPoint.getAtBasePoint(basePoint);
+      path.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+    } else if (prevControlPoint) {
+      const { x: cpx, y: cpy } = prevControlPoint.getAtBasePoint(basePoint);
+      path.quadraticCurveTo(cpx, cpy, x, y);
+    } else if (currControlPoint) {
+      const { x: cpx, y: cpy } = currControlPoint.getAtBasePoint(basePoint);
+      path.quadraticCurveTo(cpx, cpy, x, y);
+    } else {
+      path.lineTo(x, y);
+    }
+  };
+
+  points.forEach((point, i) => {
     if (i === 0) {
+      const { x, y } = point.originPoint.getAtBasePoint(basePoint);
       path.moveTo(x, y);
     } else {
-      const prevPoint = points[i - 1];
-      const prevControlPoint = prevPoint.leadingControlPointGlobal;
-      const currControlPoint = point.followingControlPointGlobal;
-
-      if (prevControlPoint && currControlPoint) {
-        const { x: cp1x, y: cp1y } = prevControlPoint.getAtBasePoint(basePoint);
-        const { x: cp2x, y: cp2y } = currControlPoint.getAtBasePoint(basePoint);
-        path.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
-      } else if (prevControlPoint) {
-        const { x: cpx, y: cpy } = prevControlPoint.getAtBasePoint(basePoint);
-        path.quadraticCurveTo(cpx, cpy, x, y);
-      } else if (currControlPoint) {
-        const { x: cpx, y: cpy } = currControlPoint.getAtBasePoint(basePoint);
-        path.quadraticCurveTo(cpx, cpy, x, y);
-      } else {
-        path.lineTo(x, y);
-      }
+      addLineSegment(points[i - 1], point);
     }
   });
-  if (isClosed) path.closePath();
+
+  if (isClosed) {
+    addLineSegment(points[points.length - 1], points[0]);
+    path.closePath();
+  }
+
   return path;
 };
