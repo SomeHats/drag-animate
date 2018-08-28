@@ -20,6 +20,15 @@ export const squarePointPath = (
   ctx.lineTo(x - halfSize, y - halfSize);
 };
 
+export const circlePointPath = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: Point,
+  size: number
+) => {
+  const radius = size / 2;
+  ctx.ellipse(x, y, radius, radius, 0, 0, Math.PI * 2);
+};
+
 export const drawSquarePointOutline = (
   ctx: CanvasRenderingContext2D,
   point: Point,
@@ -31,6 +40,33 @@ export const drawSquarePointOutline = (
   ctx.fill();
   ctx.globalCompositeOperation = "source-over";
   ctx.stroke();
+};
+
+export const drawControlPoint = (
+  ctx: CanvasRenderingContext2D,
+  originPoint: Point,
+  controlPoint: Point,
+  size: number
+) => {
+  ctx.beginPath();
+  ctx.moveTo(originPoint.x, originPoint.y);
+  ctx.lineTo(controlPoint.x, controlPoint.y);
+  ctx.stroke();
+  ctx.beginPath();
+  circlePointPath(ctx, controlPoint, size);
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.fill();
+  ctx.globalCompositeOperation = "source-over";
+  ctx.stroke();
+};
+
+export const drawShapePointWithControlPoints = (
+  ctx: CanvasRenderingContext2D,
+  point: ShapePoint,
+  keyPoint: Vector2,
+  size: number
+) => {
+  // TODO: this
 };
 
 export const getShapePath = (

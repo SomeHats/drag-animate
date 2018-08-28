@@ -1,11 +1,11 @@
 // @flow
-import { decorate, observable, action, autorun } from 'mobx';
+import { decorate, observable, action, autorun } from "mobx";
 // import { autorunAsync } from 'mobx-utils';
-import invariant from 'invariant';
-import EditorTools, { type EditorTool } from './EditorTools';
-import Scene from '../document/Scene';
+import invariant from "invariant";
+import EditorTools, { type EditorTool } from "./EditorTools";
+import Scene from "../document/Scene";
 
-const AUTOSAVE_NAME = 'drag-animate.autosave';
+const AUTOSAVE_NAME = "drag-animate.autosave";
 
 class Editor {
   tool: EditorTool = EditorTools.SELECT;
@@ -14,7 +14,7 @@ class Editor {
   static fromAutoSave(fallback: () => Scene) {
     try {
       const saved = localStorage.getItem(AUTOSAVE_NAME);
-      invariant(saved != null, 'no autosave present');
+      invariant(saved != null, "no autosave present");
       const object = JSON.parse(saved);
       const scene = Scene.deserialize(object);
       return new Editor(scene);
@@ -42,7 +42,7 @@ class Editor {
           const object = this.scene.serialize();
           const json = JSON.stringify(object);
           localStorage.setItem(AUTOSAVE_NAME, json);
-          console.log('Saved.');
+          console.log("Saved.");
         } catch (e) {
           console.warn(`couldnt autosave: ${e.message}`);
         }
@@ -58,7 +58,7 @@ class Editor {
   commands = {
     replaceDocumentWithNew: (width = 200, height = 100) => {
       this.scene = new Scene().init(width, height);
-    },
+    }
     // createShape: () => {
     //   const shape = new Shape();
     //   this.scene.addShape(shape);
@@ -81,5 +81,5 @@ export default decorate(Editor, {
   tool: observable,
   hoveredShapes: observable,
   setTool: action,
-  setHovers: action,
+  setHovers: action
 });

@@ -16,12 +16,14 @@ type Props = {|
 |};
 
 type State = {|
-  targetShape: Shape | null
+  targetShape: Shape | null,
+  isDragging: boolean
 |};
 
 class PenTool extends React.Component<Props> {
   liveState: State = observable({
-    targetShape: null
+    targetShape: null,
+    isDragging: false
   });
 
   draw = (ctx: CanvasRenderingContext2D, { nearestKeyPoint, px }: Viewport) => {
@@ -34,11 +36,24 @@ class PenTool extends React.Component<Props> {
     );
 
     shapePoints.forEach(point => {
-      CanvasHelpers.drawSquarePointOutline(
-        ctx,
-        point.originPoint.getAtBasePoint(nearestKeyPoint),
-        5 * px
-      );
+      const originPoint = point.originPoint.getAtKeyPoint(nearestKeyPoint);
+      if (point.leadingControlPointGlobal) {
+        CanvasHelpers.drawControlPoint(
+          ctx,
+          originPoint,
+          point.leadingControlPointGlobal.getAtKeyPoint(nearestKeyPoint),
+          5 * px
+        );
+      }
+      if (point.followingControlPointGlobal) {
+        CanvasHelpers.drawControlPoint(
+          ctx,
+          originPoint,
+          point.followingControlPointGlobal.getAtKeyPoint(nearestKeyPoint),
+          5 * px
+        );
+      }
+      CanvasHelpers.drawSquarePointOutline(ctx, originPoint, 5 * px);
     });
   };
 
@@ -69,17 +84,33 @@ class PenTool extends React.Component<Props> {
     return screenDistanceFromFirstPointOrigin < 7;
   }
 
-  getTargetScenePoints(): { shapePoints: ShapePoint[], isClosed: boolean } {
+  getTargetScenePoints(): {
+    shapePoints: ShapePoint[],
+    isClosed: boolean,
+    isLastPointGuide: boolean
+  } {
     const { pointer, editor, nearestKeyPoint } = this.props.viewport;
-    const { targetShape } = this.liveState;
+    const { targetShape, isDragging } = this.liveState;
 
     const scenePosition = pointer.scenePosition;
     const existingPoints = targetShape ? targetShape.points : [];
 
     // if there's no scenePosition, the viewport isn't active
     if (scenePosition) {
+      if (isDragging) {
+        return {
+          shapePoints: existingPoints,
+          isClosed: targetShape ? targetShape.isClosed : false,
+          isLastPointGuide: false
+        };
+      }
+
       if (this.shouldSnapClosed()) {
-        return { shapePoints: existingPoints, isClosed: true };
+        return {
+          shapePoints: existingPoints,
+          isClosed: true,
+          isLastPointGuide: false
+        };
       }
 
       const magicPointThingy = editor.scene.createMagicPointThingy();
@@ -89,11 +120,16 @@ class PenTool extends React.Component<Props> {
           ...existingPoints,
           new ShapePoint().init(magicPointThingy)
         ],
-        isClosed: false
+        isClosed: false,
+        isLastPointGuide: true
       };
     }
 
-    return { shapePoints: existingPoints, isClosed: false };
+    return {
+      shapePoints: existingPoints,
+      isClosed: false,
+      isLastPointGuide: false
+    };
   }
 
   getOrCreateTargetShape(): Shape {
@@ -130,6 +166,7 @@ class PenTool extends React.Component<Props> {
     }
 
     if (!(await isClick)) {
+      this.liveState.isDragging = true;
       while (await hasNextDragPosition()) {
         const leadingControlPoint =
           shapePoint.leadingControlPointGlobal ||
@@ -143,6 +180,7 @@ class PenTool extends React.Component<Props> {
 
         shapePoint.leadingControlPointGlobal = leadingControlPoint;
       }
+      this.liveState.isDragging = false;
     }
 
     if (isClosed) {
