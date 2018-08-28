@@ -1,7 +1,7 @@
 // @flow
 import React from "react";
 import invariant from "invariant";
-import { observable } from "mobx";
+import { observable, decorate } from "mobx";
 import { observer } from "mobx-react";
 import purple from "@material-ui/core/colors/purple";
 import Shape from "../../document/shapes/Shape";
@@ -15,16 +15,9 @@ type Props = {|
   viewport: Viewport
 |};
 
-type State = {|
-  targetShape: Shape | null,
-  isDragging: boolean
-|};
-
 class PenTool extends React.Component<Props> {
-  liveState: State = observable({
-    targetShape: null,
-    isDragging: false
-  });
+  targetShape: Shape | null = null;
+  isDragging: boolean = false;
 
   draw = (ctx: CanvasRenderingContext2D, { nearestKeyPoint, px }: Viewport) => {
     const { shapePoints, isClosed } = this.getTargetScenePoints();
@@ -66,8 +59,7 @@ class PenTool extends React.Component<Props> {
     const screenPosition = pointer.screenPosition;
     if (!screenPosition) return false;
 
-    const existingPoints =
-      this.liveState.targetShape && this.liveState.targetShape.points;
+    const existingPoints = this.targetShape && this.targetShape.points;
     if (!existingPoints || existingPoints.length < 2) return false;
 
     const firstPointOrigin = existingPoints[0].originPoint.getAtKeyPoint(
@@ -90,7 +82,7 @@ class PenTool extends React.Component<Props> {
     isLastPointGuide: boolean
   } {
     const { pointer, editor, nearestKeyPoint } = this.props.viewport;
-    const { targetShape, isDragging } = this.liveState;
+    const { targetShape, isDragging } = this;
 
     const scenePosition = pointer.scenePosition;
     const existingPoints = targetShape ? targetShape.points : [];
@@ -133,13 +125,13 @@ class PenTool extends React.Component<Props> {
   }
 
   getOrCreateTargetShape(): Shape {
-    if (this.liveState.targetShape) {
-      return this.liveState.targetShape;
+    if (this.targetShape) {
+      return this.targetShape;
     }
 
     const shape = new Shape();
     this.props.viewport.editor.scene.addShape(shape);
-    this.liveState.targetShape = shape;
+    this.targetShape = shape;
 
     return shape;
   }
@@ -166,7 +158,7 @@ class PenTool extends React.Component<Props> {
     }
 
     if (!(await isClick)) {
-      this.liveState.isDragging = true;
+      this.isDragging = true;
       while (await hasNextDragPosition()) {
         const leadingControlPoint =
           shapePoint.leadingControlPointGlobal ||
@@ -180,11 +172,11 @@ class PenTool extends React.Component<Props> {
 
         shapePoint.leadingControlPointGlobal = leadingControlPoint;
       }
-      this.liveState.isDragging = false;
+      this.isDragging = false;
     }
 
     if (isClosed) {
-      this.liveState.targetShape = null;
+      this.targetShape = null;
     }
   };
 
@@ -198,4 +190,8 @@ class PenTool extends React.Component<Props> {
   }
 }
 
-export default withViewport(observer(PenTool));
+export default withViewport(
+  observer(
+    decorate(PenTool, { targetShape: observable, isDragging: observable })
+  )
+);
