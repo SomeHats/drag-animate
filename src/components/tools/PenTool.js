@@ -19,34 +19,20 @@ class PenTool extends React.Component<Props> {
   targetShape: Shape | null = null;
   isDragging: boolean = false;
 
-  draw = (ctx: CanvasRenderingContext2D, { nearestKeyPoint, px }: Viewport) => {
+  draw = (ctx: CanvasRenderingContext2D, { basePoint, px }: Viewport) => {
     const { shapePoints, isClosed } = this.getTargetScenePoints();
 
     ctx.lineWidth = px;
     ctx.strokeStyle = purple.A400;
-    ctx.stroke(
-      CanvasHelpers.getShapePath(shapePoints, nearestKeyPoint, isClosed)
-    );
+    ctx.stroke(CanvasHelpers.getShapePath(shapePoints, basePoint, isClosed));
 
     shapePoints.forEach(point => {
-      const originPoint = point.originPoint.getAtKeyPoint(nearestKeyPoint);
-      if (point.leadingControlPointGlobal) {
-        CanvasHelpers.drawControlPoint(
-          ctx,
-          originPoint,
-          point.leadingControlPointGlobal.getAtKeyPoint(nearestKeyPoint),
-          5 * px
-        );
-      }
-      if (point.followingControlPointGlobal) {
-        CanvasHelpers.drawControlPoint(
-          ctx,
-          originPoint,
-          point.followingControlPointGlobal.getAtKeyPoint(nearestKeyPoint),
-          5 * px
-        );
-      }
-      CanvasHelpers.drawSquarePointOutline(ctx, originPoint, 5 * px);
+      CanvasHelpers.drawShapePointWithControlPoints(
+        ctx,
+        point,
+        basePoint,
+        5 * px
+      );
     });
   };
 

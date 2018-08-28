@@ -1,15 +1,18 @@
 // @flow
 import { decorate, observable, action, autorun } from "mobx";
+import isEqual from "lodash/isEqual";
 // import { autorunAsync } from 'mobx-utils';
 import invariant from "invariant";
-import EditorTools, { type EditorTool } from "./EditorTools";
 import Scene from "../document/Scene";
+import EditorTools, { type EditorTool } from "./EditorTools";
+import { type SelectionItem } from "./SelectionItem";
 
 const AUTOSAVE_NAME = "drag-animate.autosave";
 
 class Editor {
   tool: EditorTool = EditorTools.SELECT;
   scene: Scene;
+  selection: SelectionItem[] = [];
 
   static fromAutoSave(fallback: () => Scene) {
     try {
@@ -55,31 +58,36 @@ class Editor {
     this.tool = tool;
   }
 
+  replaceSelection(newSelection: SelectionItem[]) {
+    this.selection = newSelection;
+  }
+
+  toggleSelected(item: SelectionItem) {
+    const index = this.selection.findIndex(selected => isEqual(selected, item));
+    if (index != null) {
+      this.selection.splice(index, 1);
+    } else {
+      this.selection.push(item);
+    }
+  }
+
+  clearSelection() {
+    this.replaceSelection([]);
+  }
+
   commands = {
     replaceDocumentWithNew: (width = 200, height = 100) => {
       this.scene = new Scene().init(width, height);
     }
-    // createShape: () => {
-    //   const shape = new Shape();
-    //   this.scene.addShape(shape);
-    //   this.enterState({
-    //     type: 'CreateShape',
-    //     shape,
-    //   });
-    // },
-    // selectShape: (shape: Shape) => {
-    //   this.enterState({
-    //     type: 'ShapeSelected',
-    //     shape,
-    //   });
-    // },
   };
 }
 
 export default decorate(Editor, {
   scene: observable,
   tool: observable,
-  hoveredShapes: observable,
+  selection: observable,
   setTool: action,
-  setHovers: action
+  replaceSelection: action,
+  clearSelection: action,
+  toggleSelected: action
 });

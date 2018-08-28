@@ -7,6 +7,8 @@ type Point = {
   y: number
 };
 
+type Opts<T> = $Shape<$Exact<T>>;
+
 export const squarePointPath = (
   ctx: CanvasRenderingContext2D,
   { x, y }: Point,
@@ -29,44 +31,86 @@ export const circlePointPath = (
   ctx.ellipse(x, y, radius, radius, 0, 0, Math.PI * 2);
 };
 
-export const drawSquarePointOutline = (
+export const drawSquarePoint = (
   ctx: CanvasRenderingContext2D,
   point: Point,
-  size: number
+  size: number,
+  options: Opts<{ fill: boolean }> = {}
 ) => {
+  const { fill } = { fill: false, ...options };
   ctx.beginPath();
   squarePointPath(ctx, point, size);
-  ctx.globalCompositeOperation = "destination-out";
-  ctx.fill();
-  ctx.globalCompositeOperation = "source-over";
-  ctx.stroke();
+  if (fill) {
+    ctx.fill();
+  } else {
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.fill();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.stroke();
+  }
 };
 
 export const drawControlPoint = (
   ctx: CanvasRenderingContext2D,
   originPoint: Point,
   controlPoint: Point,
-  size: number
+  size: number,
+  options: Opts<{ fill: boolean }> = {}
 ) => {
+  const { fill } = { fill: false, ...options };
   ctx.beginPath();
   ctx.moveTo(originPoint.x, originPoint.y);
   ctx.lineTo(controlPoint.x, controlPoint.y);
   ctx.stroke();
   ctx.beginPath();
   circlePointPath(ctx, controlPoint, size);
-  ctx.globalCompositeOperation = "destination-out";
-  ctx.fill();
-  ctx.globalCompositeOperation = "source-over";
-  ctx.stroke();
+  if (fill) {
+    ctx.fill();
+  } else {
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.fill();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.stroke();
+  }
 };
 
 export const drawShapePointWithControlPoints = (
   ctx: CanvasRenderingContext2D,
   point: ShapePoint,
-  keyPoint: Vector2,
-  size: number
+  basePoint: Vector2,
+  size: number,
+  options: Opts<{
+    fillOrigin: boolean,
+    fillLeadingControl: boolean,
+    fillFollowingControl: boolean
+  }> = {}
 ) => {
-  // TODO: this
+  const { fillOrigin, fillLeadingControl, fillFollowingControl } = {
+    fillOrigin: false,
+    fillLeadingControl: false,
+    fillFollowingControl: false,
+    ...options
+  };
+  const originPoint = point.originPoint.getAtBasePoint(basePoint);
+  if (point.leadingControlPointGlobal) {
+    drawControlPoint(
+      ctx,
+      originPoint,
+      point.leadingControlPointGlobal.getAtBasePoint(basePoint),
+      size,
+      { fill: fillLeadingControl }
+    );
+  }
+  if (point.followingControlPointGlobal) {
+    drawControlPoint(
+      ctx,
+      originPoint,
+      point.followingControlPointGlobal.getAtBasePoint(basePoint),
+      size,
+      { fill: fillFollowingControl }
+    );
+  }
+  drawSquarePoint(ctx, originPoint, size, { fill: fillOrigin });
 };
 
 export const getShapePath = (
