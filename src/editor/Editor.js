@@ -1,13 +1,13 @@
 // @flow
-import { decorate, observable, action, autorun } from "mobx";
-import isEqual from "lodash/isEqual";
+import { decorate, observable, action, autorun } from 'mobx';
+import isEqual from 'lodash/isEqual';
 // import { autorunAsync } from 'mobx-utils';
-import invariant from "invariant";
-import Scene from "../document/Scene";
-import EditorTools, { type EditorTool } from "./EditorTools";
-import { type SelectionItem } from "./SelectionItem";
+import invariant from 'invariant';
+import Scene from '../document/Scene';
+import EditorTools, { type EditorTool } from './EditorTools';
+import { type SelectionItem } from './SelectionItem';
 
-const AUTOSAVE_NAME = "drag-animate.autosave";
+const AUTOSAVE_NAME = 'drag-animate.autosave';
 
 class Editor {
   tool: EditorTool = EditorTools.SELECT;
@@ -17,7 +17,7 @@ class Editor {
   static fromAutoSave(fallback: () => Scene) {
     try {
       const saved = localStorage.getItem(AUTOSAVE_NAME);
-      invariant(saved != null, "no autosave present");
+      invariant(saved != null, 'no autosave present');
       const object = JSON.parse(saved);
       const scene = Scene.deserialize(object);
       return new Editor(scene);
@@ -33,7 +33,7 @@ class Editor {
     Object.keys(this.commands).forEach(name => {
       this.commands[name] = action(
         `Editor.commands.${name}`,
-        this.commands[name]
+        this.commands[name],
       );
     });
   }
@@ -45,12 +45,12 @@ class Editor {
           const object = this.scene.serialize();
           const json = JSON.stringify(object);
           localStorage.setItem(AUTOSAVE_NAME, json);
-          console.log("Saved.");
+          console.log('Saved.');
         } catch (e) {
           console.warn(`couldnt autosave: ${e.message}`);
         }
       },
-      { delay: 2500 }
+      { delay: 2500 },
     );
   }
 
@@ -78,7 +78,7 @@ class Editor {
   commands = {
     replaceDocumentWithNew: (width = 200, height = 100) => {
       this.scene = new Scene().init(width, height);
-    }
+    },
   };
 }
 
@@ -89,5 +89,5 @@ export default decorate(Editor, {
   setTool: action,
   replaceSelection: action,
   clearSelection: action,
-  toggleSelected: action
+  toggleSelected: action,
 });

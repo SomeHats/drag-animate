@@ -54,7 +54,7 @@ class Viewport extends EventEmitter {
     const availHeight = this.pxHeight - 2 * MARGIN;
     const zoom = Math.min(
       availWidth / this.sceneWidth,
-      availHeight / this.sceneHeight
+      availHeight / this.sceneHeight,
     );
     return zoom;
   }
@@ -79,7 +79,7 @@ class Viewport extends EventEmitter {
 
   get nearestKeyPoint(): Vector2 {
     const nearest = this.basePoint.findNearest(
-      this.editor.scene.keyPointSet.keyPoints
+      this.editor.scene.keyPointSet.keyPoints,
     );
     invariant(nearest, 'nearest must be found');
     return nearest;
@@ -92,14 +92,14 @@ class Viewport extends EventEmitter {
   sceneCoordsToScreenCoords = (x: number, y: number): Vector2 => {
     return new Vector2(
       x * this.zoom + this.panX + this.left,
-      y * this.zoom + this.panY + this.top
+      y * this.zoom + this.panY + this.top,
     );
   };
 
   screenCoordsToSceneCoords = (x: number, y: number): Vector2 => {
     return new Vector2(
       (x - this.left - this.panX) / this.zoom,
-      (y - this.top - this.panY) / this.zoom
+      (y - this.top - this.panY) / this.zoom,
     );
   };
 
@@ -110,7 +110,7 @@ class Viewport extends EventEmitter {
     left,
     top,
     right,
-    bottom
+    bottom,
   ) {
     this.windowWidth = windowWidth;
     this.windowHeight = windowHeight;
@@ -129,7 +129,7 @@ class Viewport extends EventEmitter {
       for (const point of shape.points) {
         if (
           sceneCoord.distanceTo(
-            point.originPoint.getAtBasePoint(this.basePoint)
+            point.originPoint.getAtBasePoint(this.basePoint),
           ) < selectThreshold
         ) {
           return {

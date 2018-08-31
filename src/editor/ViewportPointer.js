@@ -24,7 +24,7 @@ class ViewportPointer extends EventEmitter {
     if (screenPosition) {
       return this.viewport.screenCoordsToSceneCoords(
         screenPosition.x,
-        screenPosition.y
+        screenPosition.y,
       );
     }
     return null;

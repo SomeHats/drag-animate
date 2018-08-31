@@ -68,7 +68,7 @@ var TPS = function() {
 
     invariant(
       ws,
-      'rbf failed to compile with given centers./nCenters must be unique :/'
+      'rbf failed to compile with given centers./nCenters must be unique :/',
     );
   };
 
@@ -108,7 +108,7 @@ var TPS = function() {
         }, this);
         cb(null, { points: pnts, ys: resultArr });
       }.bind(this),
-      0
+      0,
     );
   };
 };

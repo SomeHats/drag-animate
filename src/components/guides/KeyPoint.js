@@ -16,7 +16,7 @@ type Props = {
 class KeyPoint extends React.Component<Props> {
   draw = (
     ctx: CanvasRenderingContext2D,
-    { nearestKeyPoint, keyboard }: Viewport
+    { nearestKeyPoint, keyboard }: Viewport,
   ) => {
     const isActive = nearestKeyPoint === this.props.keyPoint;
 

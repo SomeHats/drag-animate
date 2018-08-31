@@ -1,27 +1,27 @@
 // @flow
-import React from "react";
-import { observer } from "mobx-react";
-import { withStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import type Editor from "../../editor/Editor";
-import withExactProps from "../../lib/withExactProps";
-import ShapeProperties from "./ShapeProperties";
+import React from 'react';
+import { observer } from 'mobx-react';
+import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import type Editor from '../../editor/Editor';
+import withExactProps from '../../lib/withExactProps';
+import ShapeProperties from './ShapeProperties';
 
 const styles = theme => ({
   drawerPaper: {
-    width: 300
+    width: 300,
   },
   addButton: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 2 * theme.spacing.unit,
-    right: 2 * theme.spacing.unit
+    right: 2 * theme.spacing.unit,
   },
-  toolbar: theme.mixins.toolbar
+  toolbar: theme.mixins.toolbar,
 });
 
 type Props = {
   editor: Editor,
-  classes: { [string]: string }
+  classes: { [string]: string },
 };
 
 const getFirstSelectedShape = editor => {
@@ -30,11 +30,11 @@ const getFirstSelectedShape = editor => {
 
   const firstSelected = selection[0];
   switch (firstSelected.type) {
-    case "ShapeSelectionItem":
+    case 'ShapeSelectionItem':
       return firstSelected.shape;
-    case "MagicPointThingySelectionItem":
+    case 'MagicPointThingySelectionItem':
       return firstSelected.inShape;
-    case "ControlPointSelectionItem":
+    case 'ControlPointSelectionItem':
       return firstSelected.inShape;
     default:
       throw new Error(`Unknown selection type ${(firstSelected.type: empty)}`);

@@ -1,27 +1,27 @@
 // @flow
-import React from "react";
-import invariant from "invariant";
-import cyan from "@material-ui/core/colors/cyan";
-import purple from "@material-ui/core/colors/purple";
-import * as CanvasHelpers from "../../lib/CanvasHelpers";
-import type MagicPointThingy from "../../document/MagicPointThingy";
-import type Shape from "../../document/shapes/Shape";
-import type ShapePoint from "../../document/shapes/ShapePoint";
+import React from 'react';
+import invariant from 'invariant';
+import cyan from '@material-ui/core/colors/cyan';
+import purple from '@material-ui/core/colors/purple';
+import * as CanvasHelpers from '../../lib/CanvasHelpers';
+import type MagicPointThingy from '../../document/MagicPointThingy';
+import type Shape from '../../document/shapes/Shape';
+import type ShapePoint from '../../document/shapes/ShapePoint';
 import type {
   SelectionItem,
   ShapeSelectionItem,
   MagicPointThingySelectionItem,
-  ControlPointSelectionItem
-} from "../../editor/SelectionItem";
-import ViewportCanvas, { type Viewport } from "../viewport/ViewportCanvas";
-import ViewportInteraction from "../viewport/ViewportInteraction";
+  ControlPointSelectionItem,
+} from '../../editor/SelectionItem';
+import ViewportCanvas, { type Viewport } from '../viewport/ViewportCanvas';
+import ViewportInteraction from '../viewport/ViewportInteraction';
 
 class SelectTool extends React.Component<{}> {
   getHoveredItem({
     pointer,
     editor,
     nearestKeyPoint,
-    px
+    px,
   }: Viewport): SelectionItem | null {
     const pointerPos = pointer.scenePosition;
     if (!pointerPos) return null;
@@ -29,7 +29,7 @@ class SelectTool extends React.Component<{}> {
     const selectThreshold = 8 * px;
 
     for (const selectedItem of editor.selection) {
-      if (selectedItem.type === "MagicPointThingySelectionItem") {
+      if (selectedItem.type === 'MagicPointThingySelectionItem') {
         const leadingControlPoint =
           selectedItem.point.leadingControlPointGlobal;
         if (
@@ -39,10 +39,10 @@ class SelectTool extends React.Component<{}> {
             .distanceTo(pointerPos) < selectThreshold
         ) {
           return {
-            type: "ControlPointSelectionItem",
+            type: 'ControlPointSelectionItem',
             point: selectedItem.point,
             inShape: selectedItem.inShape,
-            controlPoint: "leading"
+            controlPoint: 'leading',
           };
         }
         const followingControlPoint =
@@ -54,10 +54,10 @@ class SelectTool extends React.Component<{}> {
             .distanceTo(pointerPos) < selectThreshold
         ) {
           return {
-            type: "ControlPointSelectionItem",
+            type: 'ControlPointSelectionItem',
             point: selectedItem.point,
             inShape: selectedItem.inShape,
-            controlPoint: "following"
+            controlPoint: 'following',
           };
         }
       }
@@ -83,17 +83,17 @@ class SelectTool extends React.Component<{}> {
     ctx: CanvasRenderingContext2D,
     selectionItem: SelectionItem,
     color: string,
-    viewport: Viewport
+    viewport: Viewport,
   ) {
     switch (selectionItem.type) {
-      case "ShapeSelectionItem":
+      case 'ShapeSelectionItem':
         return this.drawShapeSelectionGuide(
           ctx,
           selectionItem.shape,
           color,
-          viewport
+          viewport,
         );
-      case "MagicPointThingySelectionItem":
+      case 'MagicPointThingySelectionItem':
         return this.drawPointSelectionGuide(
           ctx,
           selectionItem.inShape,
@@ -103,10 +103,10 @@ class SelectTool extends React.Component<{}> {
           {
             fillOrigin: true,
             fillLeadingControl: false,
-            fillFollowingControl: false
-          }
+            fillFollowingControl: false,
+          },
         );
-      case "ControlPointSelectionItem":
+      case 'ControlPointSelectionItem':
         return this.drawPointSelectionGuide(
           ctx,
           selectionItem.inShape,
@@ -115,13 +115,13 @@ class SelectTool extends React.Component<{}> {
           viewport,
           {
             fillOrigin: false,
-            fillLeadingControl: selectionItem.controlPoint === "leading",
-            fillFollowingControl: selectionItem.controlPoint === "following"
-          }
+            fillLeadingControl: selectionItem.controlPoint === 'leading',
+            fillFollowingControl: selectionItem.controlPoint === 'following',
+          },
         );
       default:
         throw new Error(
-          `Unknown selection item type: ${(selectionItem.type: empty)}`
+          `Unknown selection item type: ${(selectionItem.type: empty)}`,
         );
     }
   }
@@ -130,7 +130,7 @@ class SelectTool extends React.Component<{}> {
     ctx: CanvasRenderingContext2D,
     shape: Shape,
     color: string,
-    viewport: Viewport
+    viewport: Viewport,
   ) {
     this.drawShapeOutline(ctx, shape, color, viewport);
     this.drawPointOutlines(ctx, shape, color, viewport);
@@ -145,8 +145,8 @@ class SelectTool extends React.Component<{}> {
     opts: {
       fillOrigin: boolean,
       fillLeadingControl: boolean,
-      fillFollowingControl: boolean
-    }
+      fillFollowingControl: boolean,
+    },
   ) {
     this.drawShapeSelectionGuide(ctx, shape, color, viewport);
 
@@ -159,7 +159,7 @@ class SelectTool extends React.Component<{}> {
       point,
       basePoint,
       5 * px,
-      opts
+      opts,
     );
   }
 
@@ -167,7 +167,7 @@ class SelectTool extends React.Component<{}> {
     ctx: CanvasRenderingContext2D,
     shape: Shape,
     color: string,
-    { px, basePoint }: Viewport
+    { px, basePoint }: Viewport,
   ) {
     ctx.lineWidth = px;
     ctx.strokeStyle = color;
@@ -178,7 +178,7 @@ class SelectTool extends React.Component<{}> {
     ctx: CanvasRenderingContext2D,
     shape: Shape,
     color: string,
-    { px, basePoint }: Viewport
+    { px, basePoint }: Viewport,
   ) {
     ctx.lineWidth = px;
     ctx.strokeStyle = color;
@@ -186,7 +186,7 @@ class SelectTool extends React.Component<{}> {
       CanvasHelpers.drawSquarePoint(
         ctx,
         point.originPoint.getAtBasePoint(basePoint),
-        5 * px
+        5 * px,
       );
     });
   }
@@ -195,7 +195,7 @@ class SelectTool extends React.Component<{}> {
     const { pointer, keyboard, editor } = viewport;
     const selectionItem = this.getHoveredItem(viewport);
     if (selectionItem) {
-      if (keyboard.isPressed("shift") || keyboard.isPressed("ctrl")) {
+      if (keyboard.isPressed('shift') || keyboard.isPressed('ctrl')) {
         editor.toggleSelected(selectionItem);
       } else {
         editor.replaceSelection([selectionItem]);
@@ -208,32 +208,32 @@ class SelectTool extends React.Component<{}> {
   handleDragAsync = async (
     viewport: Viewport,
     isClick: Promise<boolean>,
-    hasNextDragPosition: () => Promise<boolean>
+    hasNextDragPosition: () => Promise<boolean>,
   ): Promise<void> => {
     const selection = this.getHoveredItem(viewport);
     if (!selection) return;
 
     switch (selection.type) {
-      case "MagicPointThingySelectionItem":
+      case 'MagicPointThingySelectionItem':
         return await this.handleMagicPointThingyDrag(
           selection,
           viewport,
           isClick,
-          hasNextDragPosition
+          hasNextDragPosition,
         );
-      case "ShapeSelectionItem":
+      case 'ShapeSelectionItem':
         return await this.handleShapeDrag(
           selection,
           viewport,
           isClick,
-          hasNextDragPosition
+          hasNextDragPosition,
         );
-      case "ControlPointSelectionItem":
+      case 'ControlPointSelectionItem':
         return await this.handleControlPointDrag(
           selection,
           viewport,
           isClick,
-          hasNextDragPosition
+          hasNextDragPosition,
         );
       default:
         throw new Error(`Unknown selection type: ${(selection.type: empty)}`);
@@ -244,7 +244,7 @@ class SelectTool extends React.Component<{}> {
     selection: MagicPointThingySelectionItem,
     viewport: Viewport,
     isClick: Promise<boolean>,
-    hasNextDragPosition: () => Promise<boolean>
+    hasNextDragPosition: () => Promise<boolean>,
   ): Promise<void> {
     if (await isClick) return;
 
@@ -253,7 +253,7 @@ class SelectTool extends React.Component<{}> {
       if (scenePosition) {
         selection.point.originPoint.setAtKeyPoint(
           viewport.nearestKeyPoint,
-          scenePosition
+          scenePosition,
         );
       }
     }
@@ -263,22 +263,22 @@ class SelectTool extends React.Component<{}> {
     selection: ShapeSelectionItem,
     viewport: Viewport,
     isClick: Promise<boolean>,
-    hasNextDragPosition: () => Promise<boolean>
+    hasNextDragPosition: () => Promise<boolean>,
   ): Promise<void> {
     let lastPosition = viewport.pointer.scenePosition;
-    invariant(lastPosition, "viewport pointer must be active");
+    invariant(lastPosition, 'viewport pointer must be active');
 
     if (await isClick) return;
 
     while (await hasNextDragPosition()) {
       const newPosition = viewport.pointer.scenePosition;
-      invariant(newPosition, "viewport pointer must be active");
+      invariant(newPosition, 'viewport pointer must be active');
 
       const offset = newPosition.subtract(lastPosition);
       selection.shape.points.forEach(point => {
         point.originPoint.setAtKeyPoint(
           viewport.nearestKeyPoint,
-          point.originPoint.getAtKeyPoint(viewport.nearestKeyPoint).add(offset)
+          point.originPoint.getAtKeyPoint(viewport.nearestKeyPoint).add(offset),
         );
       });
 
@@ -290,21 +290,21 @@ class SelectTool extends React.Component<{}> {
     selection: ControlPointSelectionItem,
     viewport: Viewport,
     isClick: Promise<boolean>,
-    hasNextDragPosition: () => Promise<boolean>
+    hasNextDragPosition: () => Promise<boolean>,
   ): Promise<void> {
     if (await isClick) return;
 
     while (await hasNextDragPosition()) {
       const scenePosition = viewport.pointer.scenePosition;
       if (scenePosition) {
-        if (selection.controlPoint === "leading") {
+        if (selection.controlPoint === 'leading') {
           const controlPoint = selection.point.leadingControlPointGlobal;
-          invariant(controlPoint, "leading control point must exist");
+          invariant(controlPoint, 'leading control point must exist');
           controlPoint.setAtKeyPoint(viewport.nearestKeyPoint, scenePosition);
           selection.point.leadingControlPointGlobal = controlPoint;
         } else {
           const controlPoint = selection.point.followingControlPointGlobal;
-          invariant(controlPoint, "following control point must exist");
+          invariant(controlPoint, 'following control point must exist');
           controlPoint.setAtKeyPoint(viewport.nearestKeyPoint, scenePosition);
           selection.point.followingControlPointGlobal = controlPoint;
         }

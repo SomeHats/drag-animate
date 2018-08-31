@@ -1,10 +1,10 @@
 // @flow
-import Vector2 from "./Vector2";
-import ShapePoint from "../document/shapes/ShapePoint";
+import Vector2 from './Vector2';
+import ShapePoint from '../document/shapes/ShapePoint';
 
 type Point = {
   x: number,
-  y: number
+  y: number,
 };
 
 type Opts<T> = $Shape<$Exact<T>>;
@@ -12,7 +12,7 @@ type Opts<T> = $Shape<$Exact<T>>;
 export const squarePointPath = (
   ctx: CanvasRenderingContext2D,
   { x, y }: Point,
-  size: number
+  size: number,
 ) => {
   const halfSize = size / 2;
   ctx.moveTo(x - halfSize, y - halfSize);
@@ -25,7 +25,7 @@ export const squarePointPath = (
 export const circlePointPath = (
   ctx: CanvasRenderingContext2D,
   { x, y }: Point,
-  size: number
+  size: number,
 ) => {
   const radius = size / 2;
   ctx.ellipse(x, y, radius, radius, 0, 0, Math.PI * 2);
@@ -35,7 +35,7 @@ export const drawSquarePoint = (
   ctx: CanvasRenderingContext2D,
   point: Point,
   size: number,
-  options: Opts<{ fill: boolean }> = {}
+  options: Opts<{ fill: boolean }> = {},
 ) => {
   const { fill } = { fill: false, ...options };
   ctx.beginPath();
@@ -43,9 +43,9 @@ export const drawSquarePoint = (
   if (fill) {
     ctx.fill();
   } else {
-    ctx.globalCompositeOperation = "destination-out";
+    ctx.globalCompositeOperation = 'destination-out';
     ctx.fill();
-    ctx.globalCompositeOperation = "source-over";
+    ctx.globalCompositeOperation = 'source-over';
     ctx.stroke();
   }
 };
@@ -55,7 +55,7 @@ export const drawControlPoint = (
   originPoint: Point,
   controlPoint: Point,
   size: number,
-  options: Opts<{ fill: boolean }> = {}
+  options: Opts<{ fill: boolean }> = {},
 ) => {
   const { fill } = { fill: false, ...options };
   ctx.beginPath();
@@ -67,9 +67,9 @@ export const drawControlPoint = (
   if (fill) {
     ctx.fill();
   } else {
-    ctx.globalCompositeOperation = "destination-out";
+    ctx.globalCompositeOperation = 'destination-out';
     ctx.fill();
-    ctx.globalCompositeOperation = "source-over";
+    ctx.globalCompositeOperation = 'source-over';
     ctx.stroke();
   }
 };
@@ -82,14 +82,14 @@ export const drawShapePointWithControlPoints = (
   options: Opts<{
     fillOrigin: boolean,
     fillLeadingControl: boolean,
-    fillFollowingControl: boolean
-  }> = {}
+    fillFollowingControl: boolean,
+  }> = {},
 ) => {
   const { fillOrigin, fillLeadingControl, fillFollowingControl } = {
     fillOrigin: false,
     fillLeadingControl: false,
     fillFollowingControl: false,
-    ...options
+    ...options,
   };
   const originPoint = point.originPoint.getAtBasePoint(basePoint);
   if (point.leadingControlPointGlobal) {
@@ -98,7 +98,7 @@ export const drawShapePointWithControlPoints = (
       originPoint,
       point.leadingControlPointGlobal.getAtBasePoint(basePoint),
       size,
-      { fill: fillLeadingControl }
+      { fill: fillLeadingControl },
     );
   }
   if (point.followingControlPointGlobal) {
@@ -107,7 +107,7 @@ export const drawShapePointWithControlPoints = (
       originPoint,
       point.followingControlPointGlobal.getAtBasePoint(basePoint),
       size,
-      { fill: fillFollowingControl }
+      { fill: fillFollowingControl },
     );
   }
   drawSquarePoint(ctx, originPoint, size, { fill: fillOrigin });
@@ -116,7 +116,7 @@ export const drawShapePointWithControlPoints = (
 export const getShapePath = (
   points: ShapePoint[],
   basePoint: Vector2,
-  isClosed: boolean
+  isClosed: boolean,
 ) => {
   const path = new Path2D();
 

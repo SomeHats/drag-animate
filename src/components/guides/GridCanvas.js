@@ -11,7 +11,7 @@ class GridCanvas extends React.Component<{}> {
 
   drawOutline(
     ctx: CanvasRenderingContext2D,
-    { px, sceneWidth, sceneHeight }: Viewport
+    { px, sceneWidth, sceneHeight }: Viewport,
   ) {
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.lineWidth = px;
@@ -30,12 +30,12 @@ class GridCanvas extends React.Component<{}> {
       bottom,
       right,
       screenCoordsToSceneCoords,
-    }: Viewport
+    }: Viewport,
   ) {
     const topLeft = screenCoordsToSceneCoords(left, top);
     const bottomRight = screenCoordsToSceneCoords(
       windowWidth - right,
-      windowHeight - bottom
+      windowHeight - bottom,
     );
 
     ctx.beginPath();

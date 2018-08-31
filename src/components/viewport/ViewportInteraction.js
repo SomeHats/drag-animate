@@ -21,7 +21,7 @@ type Props = {
   onDragAsync?: (
     viewport: Viewport,
     isClick: Promise<boolean>,
-    hasNextDragPosition: () => Promise<boolean>
+    hasNextDragPosition: () => Promise<boolean>,
   ) => Promise<mixed>,
   viewport: Viewport,
 };
@@ -78,7 +78,7 @@ class ViewportInteraction extends React.Component<Props> {
       if (!drag.hasNotifiedStart) {
         const startScreenPosition = viewport.sceneCoordsToScreenCoords(
           drag.startScenePosition.x,
-          drag.startScenePosition.y
+          drag.startScenePosition.y,
         );
 
         const isDrag =

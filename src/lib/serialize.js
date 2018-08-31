@@ -45,7 +45,7 @@ const getModelForClass = (ctor: any): Model => {
   const model = modelsByConstructor.get(ctor);
   invariant(
     model,
-    `model ${ctor.__proto__.constructor.name} is not serializable`
+    `model ${ctor.__proto__.constructor.name} is not serializable`,
   );
   return model;
 };
@@ -53,7 +53,7 @@ const getModelForClass = (ctor: any): Model => {
 const getScopedIdForSerializable = (object: Serializable): ScopedId => {
   invariant(
     !String(object.id).includes(ID_JOINER),
-    `id "${String(object.id)}" must not include "${ID_JOINER}"`
+    `id "${String(object.id)}" must not include "${ID_JOINER}"`,
   );
   const model = getModelForClass(object.__proto__.constructor);
   return `${model.name}${ID_JOINER}${String(object.id)}`;
@@ -61,7 +61,7 @@ const getScopedIdForSerializable = (object: Serializable): ScopedId => {
 
 export const serializeSingleRef = (
   object: Serializable,
-  objectsById: { [ScopedId]: Object }
+  objectsById: { [ScopedId]: Object },
 ): ScopedId => {
   const id = getScopedIdForSerializable(object);
   if (!objectsById[id]) {
@@ -73,14 +73,14 @@ export const serializeSingleRef = (
 
 const serializeRefList = (
   objects: Serializable[],
-  objectsById: { [ScopedId]: Object }
+  objectsById: { [ScopedId]: Object },
 ): ScopedId[] => {
   return objects.map(object => serializeSingleRef(object, objectsById));
 };
 
 const serializeObjectMap = (
   objectsByKey: { [string]: Serializable },
-  objectsById: { [ScopedId]: Object }
+  objectsById: { [ScopedId]: Object },
 ): { [string]: ScopedId } => {
   return Object.keys(objectsByKey)
     .map(key => [key, serializeSingleRef(objectsByKey[key], objectsById)])
@@ -90,7 +90,7 @@ const serializeObjectMap = (
 const serializeRef = (
   ref: Ref,
   value: any,
-  objectsById: { [ScopedId]: Object }
+  objectsById: { [ScopedId]: Object },
 ): any => {
   if (value === null) return null;
   switch (ref.type) {
@@ -107,7 +107,7 @@ const serializeRef = (
 
 const serializeItem = (
   object: Serializable,
-  objectsById: { [ScopedId]: Object }
+  objectsById: { [ScopedId]: Object },
 ): Object => {
   const { primitives, refs } = getModelForClass(object.__proto__.constructor);
 
@@ -146,15 +146,15 @@ export const serializable = (
   ctor: Class<Serializable>,
   name: string,
   primitives: string[],
-  refs: { [string]: Ref } = {}
+  refs: { [string]: Ref } = {},
 ) => {
   invariant(
     !name.includes(ID_JOINER),
-    `name "${name}" cant include "${ID_JOINER}"`
+    `name "${name}" cant include "${ID_JOINER}"`,
   );
   invariant(
     !modelsByName.has(name),
-    `serializable class with name ${name} already exists`
+    `serializable class with name ${name} already exists`,
   );
 
   const parentModels = getModelsInInheritanceTree(ctor);
@@ -183,7 +183,7 @@ const deserializeRef = (
   ref: Ref,
   value: any,
   objectsById: { [ScopedId]: Object },
-  resultCache: { [ScopedId]: Serializable } = {}
+  resultCache: { [ScopedId]: Serializable } = {},
 ) => {
   if (value === null) return null;
   switch (ref.type) {
@@ -199,7 +199,7 @@ const deserializeRef = (
         ])
         .reduce(
           (memo, [mapKey, object]) => ({ ...memo, [mapKey]: object }),
-          {}
+          {},
         );
     default:
       throw impossible(ref.type);
@@ -208,7 +208,7 @@ const deserializeRef = (
 export const deserializeItem = (
   objectsById: { [ScopedId]: Object },
   scopedId: ScopedId,
-  resultCache: { [ScopedId]: Serializable } = {}
+  resultCache: { [ScopedId]: Serializable } = {},
 ) => {
   if (!resultCache[scopedId]) {
     const source = objectsById[scopedId];
@@ -224,7 +224,7 @@ export const deserializeItem = (
         refs[key],
         source[key],
         objectsById,
-        resultCache
+        resultCache,
       );
     });
 

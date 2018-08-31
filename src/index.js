@@ -22,5 +22,5 @@ ReactDOM.render(
     <CssBaseline />
     <App editor={editor} />
   </>,
-  root
+  root,
 );

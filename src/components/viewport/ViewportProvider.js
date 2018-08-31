@@ -34,7 +34,7 @@ type ProviderState = {|
 
 export class ViewportProvider extends React.Component<
   ProviderProps,
-  ProviderState
+  ProviderState,
 > {
   state = {
     viewport: null,
@@ -83,7 +83,7 @@ export class ViewportProvider extends React.Component<
       left,
       top,
       windowWidth - right,
-      windowHeight - bottom
+      windowHeight - bottom,
     );
   }
 
@@ -173,7 +173,7 @@ export class ViewportProvider extends React.Component<
 }
 
 export const withViewport = <Props: {}>(
-  Component: React.ComponentType<Props>
+  Component: React.ComponentType<Props>,
 ): React.ComponentType<$Diff<Props, { viewport: Viewport | void }>> =>
   class extends React.Component<Props> {
     static displayName = `withViewport(${reactDisplayName(Component)})`;

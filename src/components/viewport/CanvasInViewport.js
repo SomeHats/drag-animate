@@ -53,5 +53,5 @@ class CanvasInViewport extends React.Component<Props> {
 }
 
 export default withExactProps(
-  withViewport(withStyles(styles)(observer(CanvasInViewport)))
+  withViewport(withStyles(styles)(observer(CanvasInViewport))),
 );

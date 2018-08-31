@@ -1,40 +1,40 @@
 // @flow
-import React from "react";
-import invariant from "invariant";
-import debounce from "lodash/debounce";
-import { observer } from "mobx-react";
-import { decorate, action } from "mobx";
-import { withStyles } from "@material-ui/core/styles";
-import Collapse from "@material-ui/core/Collapse";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import Switch from "@material-ui/core/Switch";
-import TextField from "@material-ui/core/TextField";
-import withExactProps from "../../lib/withExactProps";
-import type Shape from "../../document/shapes/Shape";
-import ColorPicker from "./ColorPicker";
+import React from 'react';
+import invariant from 'invariant';
+import debounce from 'lodash/debounce';
+import { observer } from 'mobx-react';
+import { decorate, action } from 'mobx';
+import { withStyles } from '@material-ui/core/styles';
+import Collapse from '@material-ui/core/Collapse';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Switch from '@material-ui/core/Switch';
+import TextField from '@material-ui/core/TextField';
+import withExactProps from '../../lib/withExactProps';
+import type Shape from '../../document/shapes/Shape';
+import ColorPicker from './ColorPicker';
 
 const styles = theme => ({
   gutters: {
-    paddingRight: theme.spacing.unit * 2
+    paddingRight: theme.spacing.unit * 2,
   },
   nested: {
-    paddingLeft: theme.spacing.unit * 2
+    paddingLeft: theme.spacing.unit * 2,
   },
   input: {
-    width: theme.spacing.unit * 8
+    width: theme.spacing.unit * 8,
   },
   item: {
-    height: theme.spacing.unit * 7
-  }
+    height: theme.spacing.unit * 7,
+  },
 });
 
 type Props = {|
   shape: Shape,
-  classes: { [string]: string }
+  classes: { [string]: string },
 |};
 
 class ShapeProperties extends React.Component<Props> {
@@ -51,7 +51,7 @@ class ShapeProperties extends React.Component<Props> {
   onChangeStrokeWidth = e => {
     invariant(
       e.currentTarget instanceof HTMLInputElement,
-      "target must be input"
+      'target must be input',
     );
     const value = parseFloat(e.currentTarget.value);
     if (!isNaN(value)) {
@@ -138,8 +138,8 @@ export default withExactProps(
         onToggleOutline: action,
         onChangeStrokeWidth: action,
         onChangeStrokeColor: action,
-        onChangeFillColor: action
-      })
-    )
-  )
+        onChangeFillColor: action,
+      }),
+    ),
+  ),
 );

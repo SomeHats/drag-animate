@@ -1,7 +1,7 @@
 // @flow
-import { decorate, observable, computed } from "mobx";
-import { genId, serializable, ref } from "../../lib/serialize";
-import MagicPointThingy from "../MagicPointThingy";
+import { decorate, observable, computed } from 'mobx';
+import { genId, serializable, ref } from '../../lib/serialize';
+import MagicPointThingy from '../MagicPointThingy';
 
 class ShapePoint {
   id = genId();
@@ -74,10 +74,10 @@ class ShapePoint {
   }
 }
 
-serializable(ShapePoint, "ShapePoint", ["areControlPointsMirrored"], {
+serializable(ShapePoint, 'ShapePoint', ['areControlPointsMirrored'], {
   originPoint: ref(MagicPointThingy),
   _leadingControlPointRelative: ref(MagicPointThingy),
-  _followingControlPointRelative: ref(MagicPointThingy)
+  _followingControlPointRelative: ref(MagicPointThingy),
 });
 
 export default decorate(ShapePoint, {
@@ -88,5 +88,5 @@ export default decorate(ShapePoint, {
   leadingControlPointGlobal: computed,
   leadingControlPointRelative: computed,
   followingControlPointGlobal: computed,
-  followingControlPointRelative: computed
+  followingControlPointRelative: computed,
 });

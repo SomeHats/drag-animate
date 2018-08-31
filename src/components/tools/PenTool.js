@@ -1,18 +1,18 @@
 // @flow
-import React from "react";
-import invariant from "invariant";
-import { observable, decorate } from "mobx";
-import { observer } from "mobx-react";
-import purple from "@material-ui/core/colors/purple";
-import Shape from "../../document/shapes/Shape";
-import ShapePoint from "../../document/shapes/ShapePoint";
-import { withViewport, type Viewport } from "../viewport/ViewportProvider";
-import ViewportCanvas from "../viewport/ViewportCanvas";
-import ViewportInteraction from "../viewport/ViewportInteraction";
-import * as CanvasHelpers from "../../lib/CanvasHelpers";
+import React from 'react';
+import invariant from 'invariant';
+import { observable, decorate } from 'mobx';
+import { observer } from 'mobx-react';
+import purple from '@material-ui/core/colors/purple';
+import Shape from '../../document/shapes/Shape';
+import ShapePoint from '../../document/shapes/ShapePoint';
+import { withViewport, type Viewport } from '../viewport/ViewportProvider';
+import ViewportCanvas from '../viewport/ViewportCanvas';
+import ViewportInteraction from '../viewport/ViewportInteraction';
+import * as CanvasHelpers from '../../lib/CanvasHelpers';
 
 type Props = {|
-  viewport: Viewport
+  viewport: Viewport,
 |};
 
 class PenTool extends React.Component<Props> {
@@ -31,7 +31,7 @@ class PenTool extends React.Component<Props> {
         ctx,
         point,
         basePoint,
-        5 * px
+        5 * px,
       );
     });
   };
@@ -40,7 +40,7 @@ class PenTool extends React.Component<Props> {
     const {
       nearestKeyPoint,
       pointer,
-      sceneCoordsToScreenCoords
+      sceneCoordsToScreenCoords,
     } = this.props.viewport;
     const screenPosition = pointer.screenPosition;
     if (!screenPosition) return false;
@@ -49,14 +49,14 @@ class PenTool extends React.Component<Props> {
     if (!existingPoints || existingPoints.length < 2) return false;
 
     const firstPointOrigin = existingPoints[0].originPoint.getAtKeyPoint(
-      nearestKeyPoint
+      nearestKeyPoint,
     );
     const firstPointOriginScreenCoords = sceneCoordsToScreenCoords(
       firstPointOrigin.x,
-      firstPointOrigin.y
+      firstPointOrigin.y,
     );
     const screenDistanceFromFirstPointOrigin = firstPointOriginScreenCoords.distanceTo(
-      screenPosition
+      screenPosition,
     );
 
     return screenDistanceFromFirstPointOrigin < 7;
@@ -65,7 +65,7 @@ class PenTool extends React.Component<Props> {
   getTargetScenePoints(): {
     shapePoints: ShapePoint[],
     isClosed: boolean,
-    isLastPointGuide: boolean
+    isLastPointGuide: boolean,
   } {
     const { pointer, editor, nearestKeyPoint } = this.props.viewport;
     const { targetShape, isDragging } = this;
@@ -79,7 +79,7 @@ class PenTool extends React.Component<Props> {
         return {
           shapePoints: existingPoints,
           isClosed: targetShape ? targetShape.isClosed : false,
-          isLastPointGuide: false
+          isLastPointGuide: false,
         };
       }
 
@@ -87,7 +87,7 @@ class PenTool extends React.Component<Props> {
         return {
           shapePoints: existingPoints,
           isClosed: true,
-          isLastPointGuide: false
+          isLastPointGuide: false,
         };
       }
 
@@ -96,17 +96,17 @@ class PenTool extends React.Component<Props> {
       return {
         shapePoints: [
           ...existingPoints,
-          new ShapePoint().init(magicPointThingy)
+          new ShapePoint().init(magicPointThingy),
         ],
         isClosed: false,
-        isLastPointGuide: true
+        isLastPointGuide: true,
       };
     }
 
     return {
       shapePoints: existingPoints,
       isClosed: false,
-      isLastPointGuide: false
+      isLastPointGuide: false,
     };
   }
 
@@ -125,10 +125,10 @@ class PenTool extends React.Component<Props> {
   handleDrag = async (
     { pointer, editor, nearestKeyPoint }: Viewport,
     isClick: Promise<boolean>,
-    hasNextDragPosition: () => Promise<boolean>
+    hasNextDragPosition: () => Promise<boolean>,
   ): Promise<void> => {
     const startPosition = pointer.scenePosition;
-    invariant(startPosition, "pointer must be active");
+    invariant(startPosition, 'pointer must be active');
 
     const shape = this.getOrCreateTargetShape();
     const isClosed = this.shouldSnapClosed();
@@ -150,10 +150,10 @@ class PenTool extends React.Component<Props> {
           shapePoint.leadingControlPointGlobal ||
           editor.scene.createMagicPointThingy();
 
-        invariant(pointer.scenePosition, "scenePosition must be set");
+        invariant(pointer.scenePosition, 'scenePosition must be set');
         leadingControlPoint.setAtKeyPoint(
           nearestKeyPoint,
-          pointer.scenePosition
+          pointer.scenePosition,
         );
 
         shapePoint.leadingControlPointGlobal = leadingControlPoint;
@@ -178,6 +178,6 @@ class PenTool extends React.Component<Props> {
 
 export default withViewport(
   observer(
-    decorate(PenTool, { targetShape: observable, isDragging: observable })
-  )
+    decorate(PenTool, { targetShape: observable, isDragging: observable }),
+  ),
 );

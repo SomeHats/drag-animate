@@ -1,9 +1,9 @@
 // @flow
-import { decorate, observable } from "mobx";
-import { genId, serializable } from "../lib/serialize";
+import { decorate, observable } from 'mobx';
+import { genId, serializable } from '../lib/serialize';
 
-const defaultStrokeColor = "#000000";
-const defaultFillColor = "#abcdef";
+const defaultStrokeColor = '#000000';
+const defaultFillColor = '#abcdef';
 
 class ShapeStyle {
   id = genId();
@@ -38,12 +38,12 @@ class ShapeStyle {
   }
 }
 
-serializable(ShapeStyle, "ShapeStyle", [
-  "hasFill",
-  "hasStroke",
-  "strokeWidth",
-  "strokeColor",
-  "fillColor"
+serializable(ShapeStyle, 'ShapeStyle', [
+  'hasFill',
+  'hasStroke',
+  'strokeWidth',
+  'strokeColor',
+  'fillColor',
 ]);
 
 export default decorate(ShapeStyle, {
@@ -51,5 +51,5 @@ export default decorate(ShapeStyle, {
   strokeColor: observable,
   fillColor: observable,
   hasStroke: observable,
-  hasFill: observable
+  hasFill: observable,
 });
