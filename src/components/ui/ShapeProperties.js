@@ -114,7 +114,7 @@ class ShapeProperties extends React.Component<Props> {
             <Switch checked={hasFill} onChange={this.onToggleFill} />
           </ListItemSecondaryAction>
         </ListItem>
-        <Collapse in={hasStroke} timeout="auto" unmountOnExit>
+        <Collapse in={hasFill} timeout="auto" unmountOnExit>
           <List component="div" disablePadding className={classes.nested}>
             <ListItem className={classes.item}>
               <ListItemText>Colour</ListItemText>
