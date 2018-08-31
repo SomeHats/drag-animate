@@ -1,35 +1,50 @@
 // @flow
-import React from 'react';
-import { observer } from 'mobx-react';
-import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import withExactProps from '../../lib/withExactProps';
-import type Editor from '../../editor/Editor';
+import React from "react";
+import { observer } from "mobx-react";
+import { withStyles } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import type Editor from "../../editor/Editor";
+import withExactProps from "../../lib/withExactProps";
+import ShapeProperties from "./ShapeProperties";
 
 const styles = theme => ({
   drawerPaper: {
-    width: 300,
+    width: 300
   },
   addButton: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 2 * theme.spacing.unit,
-    right: 2 * theme.spacing.unit,
+    right: 2 * theme.spacing.unit
   },
-  toolbar: theme.mixins.toolbar,
+  toolbar: theme.mixins.toolbar
 });
 
 type Props = {
   editor: Editor,
-  classes: { [string]: string },
+  classes: { [string]: string }
+};
+
+const getFirstSelectedShape = editor => {
+  const selection = editor.selection;
+  if (!selection || selection.length < 1) return null;
+
+  const firstSelected = selection[0];
+  switch (firstSelected.type) {
+    case "ShapeSelectionItem":
+      return firstSelected.shape;
+    case "MagicPointThingySelectionItem":
+      return firstSelected.inShape;
+    case "ControlPointSelectionItem":
+      return firstSelected.inShape;
+    default:
+      throw new Error(`Unknown selection type ${(firstSelected.type: empty)}`);
+  }
 };
 
 class ShapeDrawer extends React.Component<Props> {
   render() {
     const { classes, editor } = this.props;
+    const selectedShape = getFirstSelectedShape(editor);
     return (
       <Drawer
         variant="permanent"
@@ -37,7 +52,8 @@ class ShapeDrawer extends React.Component<Props> {
         classes={{ paper: classes.drawerPaper }}
       >
         <div className={classes.toolbar} />
-        <List subheader={<ListSubheader>Shapes</ListSubheader>}>
+        {selectedShape && <ShapeProperties shape={selectedShape} />}
+        {/* <List subheader={<ListSubheader>Shapes</ListSubheader>}>
           {editor.scene.shapes.map((shape, i) => (
             <ListItem key={i} button>
               <ListItemText>
@@ -45,7 +61,7 @@ class ShapeDrawer extends React.Component<Props> {
               </ListItemText>
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Drawer>
     );
   }

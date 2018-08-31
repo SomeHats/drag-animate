@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.0.0",
     "@material-ui/icons": "^3.0.0",
+    "classnames": "^2.2.6",
     "invariant": "^2.2.4",
     "keycode": "^2.2.0",
     "lodash": "^4.17.10",
@@ -12,6 +13,7 @@
     "mobx-react": "^5.2.5",
     "pepjs": "^0.4.3",
     "react": "^16.4.2",
+    "react-color": "^2.14.1",
     "react-display-name": "^0.2.4",
     "react-dom": "^16.4.2",
     "react-scripts": "^2.0.0-next.3e165448",

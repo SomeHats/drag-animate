@@ -1,19 +1,24 @@
 // @flow
-import { decorate, observable } from 'mobx';
-import { genId, serializable } from '../lib/serialize';
+import { decorate, observable } from "mobx";
+import { genId, serializable } from "../lib/serialize";
+
+const defaultStrokeColor = "#000000";
+const defaultFillColor = "#abcdef";
 
 class ShapeStyle {
   id = genId();
+  hasStroke: boolean = true;
+  hasFill: boolean = false;
   strokeWidth: number = 1;
-  strokeColor: null | string = 'black';
-  fillColor: null | string = null;
+  strokeColor: string = defaultStrokeColor;
+  fillColor: string = defaultFillColor;
 
   drawCurrentContextPath(ctx: CanvasRenderingContext2D) {
-    if (this.fillColor !== null) {
+    if (this.hasFill) {
       ctx.fillStyle = this.fillColor;
       ctx.fill();
     }
-    if (this.strokeColor !== null) {
+    if (this.hasStroke) {
       ctx.lineWidth = this.strokeWidth;
       ctx.strokeStyle = this.strokeColor;
       ctx.stroke();
@@ -21,11 +26,11 @@ class ShapeStyle {
   }
 
   drawPath(ctx: CanvasRenderingContext2D, path: Path2D) {
-    if (this.fillColor !== null) {
+    if (this.hasFill) {
       ctx.fillStyle = this.fillColor;
       ctx.fill(path);
     }
-    if (this.strokeColor !== null) {
+    if (this.hasStroke) {
       ctx.lineWidth = this.strokeWidth;
       ctx.strokeStyle = this.strokeColor;
       ctx.stroke(path);
@@ -33,14 +38,18 @@ class ShapeStyle {
   }
 }
 
-serializable(ShapeStyle, 'ShapeStyle', [
-  'strokeWidth',
-  'strokeColor',
-  'fillColor',
+serializable(ShapeStyle, "ShapeStyle", [
+  "hasFill",
+  "hasStroke",
+  "strokeWidth",
+  "strokeColor",
+  "fillColor"
 ]);
 
 export default decorate(ShapeStyle, {
   strokeWidth: observable,
   strokeColor: observable,
   fillColor: observable,
+  hasStroke: observable,
+  hasFill: observable
 });
