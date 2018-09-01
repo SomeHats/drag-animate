@@ -5,6 +5,9 @@ import debounce from 'lodash/debounce';
 import { observer } from 'mobx-react';
 import { decorate, action } from 'mobx';
 import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -15,6 +18,7 @@ import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import withExactProps from '../../lib/withExactProps';
 import type Shape from '../../document/shapes/Shape';
+import type Editor from '../../editor/Editor';
 import ColorPicker from './ColorPicker';
 
 const styles = theme => ({
@@ -34,6 +38,7 @@ const styles = theme => ({
 
 type Props = {|
   shape: Shape,
+  editor: Editor,
   classes: { [string]: string },
 |};
 
@@ -67,11 +72,57 @@ class ShapeProperties extends React.Component<Props> {
     this.props.shape.style.fillColor = color;
   };
 
+  onBringForward = () => {
+    const { shape, editor } = this.props;
+    const allShapes = editor.scene.shapes;
+    const shapeIndex = allShapes.indexOf(shape);
+    if (shapeIndex !== -1 && shapeIndex < allShapes.length) {
+      const swapShape = allShapes[shapeIndex + 1];
+      allShapes[shapeIndex] = swapShape;
+      allShapes[shapeIndex + 1] = shape;
+    }
+  };
+
+  onSendBackward = () => {
+    const { shape, editor } = this.props;
+    const allShapes = editor.scene.shapes;
+    const shapeIndex = allShapes.indexOf(shape);
+    if (shapeIndex > 0) {
+      const swapShape = allShapes[shapeIndex - 1];
+      allShapes[shapeIndex] = swapShape;
+      allShapes[shapeIndex - 1] = shape;
+    }
+  };
+
   render() {
-    const { shape, classes } = this.props;
+    const { shape, classes, editor } = this.props;
     const { hasStroke, hasFill, strokeWidth } = shape.style;
+    const allShapes = editor.scene.shapes;
+    const shapeIndex = allShapes.indexOf(shape);
+    const isFirstShape = shapeIndex === 0;
+    const isLastShape = shapeIndex === allShapes.length - 1;
+
     return (
       <List subheader={<ListSubheader>Shape Properties</ListSubheader>}>
+        <ListItem classes={{ gutters: classes.gutters }}>
+          <ListItemText>Arrange</ListItemText>
+          <ListItemSecondaryAction>
+            <IconButton
+              aria-label="Bring forward"
+              disabled={isLastShape}
+              onClick={this.onBringForward}
+            >
+              <ArrowUpwardIcon />
+            </IconButton>
+            <IconButton
+              aria-label="Send back"
+              disabled={isFirstShape}
+              onClick={this.onSendBackward}
+            >
+              <ArrowDownwardIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
         <ListItem
           classes={{ gutters: classes.gutters }}
           onClick={this.onToggleStroke}

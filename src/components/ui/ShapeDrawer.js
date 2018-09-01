@@ -52,7 +52,9 @@ class ShapeDrawer extends React.Component<Props> {
         classes={{ paper: classes.drawerPaper }}
       >
         <div className={classes.toolbar} />
-        {selectedShape && <ShapeProperties shape={selectedShape} />}
+        {selectedShape && (
+          <ShapeProperties shape={selectedShape} editor={editor} />
+        )}
         {/* <List subheader={<ListSubheader>Shapes</ListSubheader>}>
           {editor.scene.shapes.map((shape, i) => (
             <ListItem key={i} button>
