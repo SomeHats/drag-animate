@@ -8,6 +8,6 @@ const EditorTools: {|
   PEN: 'PEN',
 };
 
-export type EditorTool = $Keys<typeof EditorTools>;
+export type EditorTool = $Values<typeof EditorTools>;
 
 export default EditorTools;
