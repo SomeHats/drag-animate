@@ -6,16 +6,15 @@ import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Tooltip from '@material-ui/core/Tooltip';
-import type Editor from '../../editor/Editor';
-import { type EditorTool } from '../../editor/EditorTools';
 import KeyboardShortcut from '../KeyboardShortcut';
 
 type Props = {|
   name: string,
   shortcutKey: string,
   icon: React.Node,
-  editor: Editor,
-  tool: EditorTool,
+  isActive: boolean,
+  cmdKey?: boolean,
+  onClick: () => mixed,
   classes: { [string]: string },
 |};
 
@@ -34,18 +33,21 @@ const styles = theme => ({
   },
 });
 
-class ToolBoxButton extends React.Component<Props> {
+class ControlBarButton extends React.Component<Props> {
   handleClick = () => {
-    const { editor, tool } = this.props;
-    editor.setTool(tool);
+    this.props.onClick();
   };
 
   render() {
-    const { name, shortcutKey, tool, editor, icon, classes } = this.props;
+    const { name, shortcutKey, icon, isActive, cmdKey, classes } = this.props;
 
     return (
       <>
-        <KeyboardShortcut name={shortcutKey} onDown={this.handleClick} />
+        <KeyboardShortcut
+          cmdKey={cmdKey == null ? false : cmdKey}
+          name={shortcutKey}
+          onDown={this.handleClick}
+        />
         <Tooltip
           title={`${name} (${shortcutKey.toUpperCase()})`}
           placement="right"
@@ -55,14 +57,14 @@ class ToolBoxButton extends React.Component<Props> {
             button
             classes={{
               root: cx(classes.listItem, {
-                [classes.active]: tool === editor.tool,
+                [classes.active]: isActive,
               }),
             }}
             onClick={this.handleClick}
           >
             <ListItemIcon
               classes={{
-                root: tool === editor.tool ? classes.active : classes.inactive,
+                root: isActive ? classes.active : classes.inactive,
               }}
             >
               {icon}
@@ -74,4 +76,4 @@ class ToolBoxButton extends React.Component<Props> {
   }
 }
 
-export default withStyles(styles)(observer(ToolBoxButton));
+export default withStyles(styles)(observer(ControlBarButton));

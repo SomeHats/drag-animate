@@ -5,7 +5,7 @@ import type Editor from '../editor/Editor';
 import { ViewportProvider } from './viewport/ViewportProvider';
 import HeadBar from './ui/HeadBar';
 import ShapeDrawer from './ui/ShapeDrawer';
-import ToolBox from './ui/ToolBox';
+import ControlBar from './ui/ControlBar';
 import GridCanvas from './guides/GridCanvas';
 import EditorTool from './tools/EditorTool';
 import SceneRenderer from './scene/SceneRenderer';
@@ -19,7 +19,7 @@ class App extends React.Component<Props, void> {
     return (
       <>
         <HeadBar />
-        <ToolBox editor={editor} />
+        <ControlBar editor={editor} />
         <ShapeDrawer editor={editor} />
         <ViewportProvider
           editor={editor}

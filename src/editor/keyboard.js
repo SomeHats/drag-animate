@@ -18,6 +18,7 @@ class Keyboard {
   }
 
   handleKeyDown = (e: KeyboardEvent) => {
+    e.preventDefault();
     this._isPressedByKeyCode[e.keyCode] = true;
     this._events.emit(`keyDown:${e.keyCode}`);
   };

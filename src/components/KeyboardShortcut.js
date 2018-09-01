@@ -6,6 +6,7 @@ export type Keyboard = typeof keyboard;
 
 type Props = {|
   name: string,
+  cmdKey?: boolean,
   onDown?: Keyboard => void,
   onUp?: Keyboard => void,
 |};
@@ -36,6 +37,7 @@ class KeyboardShortcut extends React.Component<Props> {
   }
 
   handleKeyDown = () => {
+    if (this.props.cmdKey === true && !keyboard.isPressed('cmd')) return;
     if (this.props.onDown) this.props.onDown(keyboard);
   };
 
