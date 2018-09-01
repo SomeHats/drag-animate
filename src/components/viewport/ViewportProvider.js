@@ -140,6 +140,20 @@ export const ViewportProvider = observer(
       }
     };
 
+    handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const { deltaX, deltaY, ctrlKey } = e;
+      const { viewport } = this.state;
+      if (!viewport) return;
+
+      if (ctrlKey) {
+        viewport.zoom += viewport.zoom * 0.01 * -deltaY;
+      } else {
+        viewport.panX -= deltaX;
+        viewport.panY -= deltaY;
+      }
+    };
+
     renderViewport(viewport: Viewport) {
       const { children, editor } = this.props;
       invariant(viewport.editor === editor, 'prop editor must not change');
@@ -166,6 +180,7 @@ export const ViewportProvider = observer(
             onMouseMove={this.handleMouseMove}
             onMouseUp={this.handleMouseUp}
             onMouseLeave={this.handleMouseLeave}
+            onWheel={this.handleWheel}
           />
         </>
       );

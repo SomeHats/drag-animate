@@ -26,6 +26,9 @@ class Viewport extends EventEmitter {
   editor: Editor;
   basePoint: Vector2 = new Vector2(0, 0);
   pointer: ViewportPointer = new ViewportPointer(this);
+  panX = 0;
+  panY = 0;
+  zoom = 1;
 
   constructor(editor: Editor) {
     super();
@@ -49,7 +52,7 @@ class Viewport extends EventEmitter {
     return this.windowHeight - this.top - this.bottom;
   }
 
-  get zoom(): number {
+  get idealZoom(): number {
     const availWidth = this.pxWidth - 2 * MARGIN;
     const availHeight = this.pxHeight - 2 * MARGIN;
     const zoom = Math.min(
@@ -59,14 +62,14 @@ class Viewport extends EventEmitter {
     return zoom;
   }
 
-  get panX(): number {
+  get idealPanX(): number {
     const availWidth = this.pxWidth - 2 * MARGIN;
     return this.zoom * this.sceneWidth < availWidth
       ? MARGIN + (availWidth / 2 - (this.zoom * this.sceneWidth) / 2)
       : MARGIN;
   }
 
-  get panY(): number {
+  get idealPanY(): number {
     const availHeight = this.pxHeight - 2 * MARGIN;
     return this.zoom * this.sceneHeight < availHeight
       ? MARGIN + (availHeight / 2 - (this.zoom * this.sceneHeight) / 2)
@@ -119,6 +122,9 @@ class Viewport extends EventEmitter {
     this.top = top;
     this.right = right;
     this.bottom = bottom;
+    this.panX = this.idealPanX;
+    this.panY = this.idealPanY;
+    this.zoom = this.idealZoom;
   }
 
   getItemAtSceneCoord(sceneCoord: Vector2): SelectionItem | null {
@@ -163,13 +169,16 @@ export default decorate(Viewport, {
   right: observable,
   editor: observable,
   pointer: observable,
+  panX: observable,
+  panY: observable,
+  zoom: observable,
   sceneWidth: computed,
   sceneHeight: computed,
   pxWidth: computed,
   pxHeight: computed,
-  zoom: computed,
-  panX: computed,
-  panY: computed,
+  idealZoom: computed,
+  idealPanX: computed,
+  idealPanY: computed,
   px: computed,
   scene: computed,
   nearestKeyPoint: invariant,
