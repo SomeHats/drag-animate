@@ -7,7 +7,6 @@ import HeadBar from './ui/HeadBar';
 import ShapeDrawer from './ui/ShapeDrawer';
 import ToolBox from './ui/ToolBox';
 import GridCanvas from './guides/GridCanvas';
-import KeyPoints from './guides/KeyPoints';
 import EditorTool from './tools/EditorTool';
 import SceneRenderer from './scene/SceneRenderer';
 import BaseTrackyThing from './BaseTrackyThing';
@@ -35,7 +34,6 @@ class App extends React.Component<Props, void> {
           <SceneRenderer />
           <GridCanvas />
           <BaseTrackyThing />
-          <KeyPoints />
           <EditorTool />
         </ViewportProvider>
       </>

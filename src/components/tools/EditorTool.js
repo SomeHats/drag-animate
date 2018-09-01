@@ -5,6 +5,7 @@ import withExactProps from '../../lib/withExactProps';
 import { withViewport, type Viewport } from '../viewport/ViewportProvider';
 import SelectTool from './SelectTool';
 import PenTool from './PenTool';
+import KeyPointTool from './KeyPointTool';
 
 type Props = {
   viewport: Viewport,
@@ -20,6 +21,8 @@ class EditorStateInteraction extends React.Component<Props> {
         return <SelectTool />;
       case 'PEN':
         return <PenTool />;
+      case 'KEY_POINT':
+        return <KeyPointTool />;
       default:
         throw new Error(`unknown tool: ${(tool: empty)}`);
     }

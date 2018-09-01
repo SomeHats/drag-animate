@@ -10,6 +10,7 @@ import { withViewport, type Viewport } from '../viewport/ViewportProvider';
 import ViewportCanvas from '../viewport/ViewportCanvas';
 import ViewportInteraction from '../viewport/ViewportInteraction';
 import * as CanvasHelpers from '../../lib/CanvasHelpers';
+import KeyPoints from '../guides/KeyPoints';
 
 type Props = {|
   viewport: Viewport,
@@ -169,6 +170,7 @@ class PenTool extends React.Component<Props> {
   render() {
     return (
       <>
+        <KeyPoints />
         <ViewportCanvas draw={this.draw} />
         <ViewportInteraction onDragAsync={this.handleDrag} />
       </>

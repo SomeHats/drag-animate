@@ -9,6 +9,7 @@ class ViewportPointer extends EventEmitter {
   viewport: Viewport;
   screenPosition: null | Vector2 = null;
   isDown: boolean = false;
+  cursor: string = 'default';
 
   constructor(viewport: Viewport) {
     super();
@@ -89,6 +90,7 @@ class ViewportPointer extends EventEmitter {
 export default decorate(ViewportPointer, {
   isDown: observable,
   screenPosition: observable,
+  cursor: observable,
   scenePosition: computed,
   isActive: computed,
   hoveredItem: computed,

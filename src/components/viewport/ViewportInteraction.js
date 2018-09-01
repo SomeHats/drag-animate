@@ -23,6 +23,7 @@ type Props = {
     isClick: Promise<boolean>,
     hasNextDragPosition: () => Promise<boolean>,
   ) => Promise<mixed>,
+  cursor?: string,
   viewport: Viewport,
 };
 
@@ -50,6 +51,15 @@ class ViewportInteraction extends React.Component<Props> {
     this._unsubscribes.push(pointer.onPointerUp(this.handlePointerUp));
   }
 
+  componentDidUpdate(prevProps: Props) {
+    const cursor = this.props.cursor;
+    if (
+      prevProps.cursor !== cursor &&
+      cursor !== this.props.viewport.pointer.cursor
+    ) {
+      this.props.viewport.pointer.cursor = cursor == null ? 'default' : cursor;
+    }
+  }
   componentWillUnmount() {
     this._unsubscribes.forEach(unsubscribe => unsubscribe());
     this._unsubscribes = [];

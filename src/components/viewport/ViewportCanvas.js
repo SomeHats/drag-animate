@@ -9,7 +9,6 @@ export type { Viewport } from './ViewportProvider';
 
 type Props = {
   draw: (CanvasRenderingContext2D, Viewport) => void,
-  cursor?: string,
   canvasRef?: (HTMLCanvasElement | null) => void,
   contextRef?: (CanvasRenderingContext2D | null) => void,
   viewport: Viewport,
@@ -26,7 +25,7 @@ class ViewportCanvas extends React.Component<Props, void> {
   };
 
   render() {
-    const { viewport, cursor, canvasRef, contextRef } = this.props;
+    const { viewport, canvasRef, contextRef } = this.props;
     const { pxWidth, pxHeight, left, top } = viewport;
     return (
       <Canvas
@@ -34,7 +33,6 @@ class ViewportCanvas extends React.Component<Props, void> {
           position: 'absolute',
           left,
           top,
-          cursor: cursor == null ? undefined : cursor,
         }}
         draw={this.draw}
         width={pxWidth}

@@ -4,7 +4,6 @@ import invariant from 'invariant';
 import cyan from '@material-ui/core/colors/cyan';
 import purple from '@material-ui/core/colors/purple';
 import * as CanvasHelpers from '../../lib/CanvasHelpers';
-import type MagicPointThingy from '../../document/MagicPointThingy';
 import type Shape from '../../document/shapes/Shape';
 import type ShapePoint from '../../document/shapes/ShapePoint';
 import type {
@@ -15,6 +14,7 @@ import type {
 } from '../../editor/SelectionItem';
 import ViewportCanvas, { type Viewport } from '../viewport/ViewportCanvas';
 import ViewportInteraction from '../viewport/ViewportInteraction';
+import KeyPoints from '../guides/KeyPoints';
 
 class SelectTool extends React.Component<{}> {
   getHoveredItem({
@@ -192,7 +192,7 @@ class SelectTool extends React.Component<{}> {
   }
 
   handleClick = (viewport: Viewport) => {
-    const { pointer, keyboard, editor } = viewport;
+    const { keyboard, editor } = viewport;
     const selectionItem = this.getHoveredItem(viewport);
     if (selectionItem) {
       if (keyboard.isPressed('shift') || keyboard.isPressed('ctrl')) {
@@ -315,6 +315,7 @@ class SelectTool extends React.Component<{}> {
   render() {
     return (
       <>
+        <KeyPoints />
         <ViewportCanvas draw={this.drawHover} />
         <ViewportCanvas draw={this.drawSelection} />
         <ViewportInteraction

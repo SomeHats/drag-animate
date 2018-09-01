@@ -4,9 +4,7 @@ import cx from 'classnames';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Popover from '@material-ui/core/Popover';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ChromeColorPicker from 'react-color/lib/Chrome';
-import withExactProps from '../../lib/withExactProps';
 
 const rgba = ({ rgb }) => {
   if (typeof rgb.a === 'number') {

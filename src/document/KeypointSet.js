@@ -1,4 +1,5 @@
 // @flow
+import minBy from 'lodash/minBy';
 import { decorate, observable, computed, action } from 'mobx';
 import { genId, serializable, refObjectMap, type ID } from '../lib/serialize';
 import Vector2 from '../lib/Vector2';
@@ -21,6 +22,10 @@ class KeyPointSet {
 
   has(point: Vector2) {
     return this.get(point.id) === point;
+  }
+
+  getNearestTo(targetPoint: Vector2): Vector2 {
+    return minBy(this.keyPoints, keyPoint => keyPoint.distanceTo(targetPoint));
   }
 }
 

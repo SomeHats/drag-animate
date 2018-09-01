@@ -6,6 +6,7 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
 import CreateIcon from '@material-ui/icons/Create';
+import GpsNotFixedIcon from '@material-ui/icons/GpsNotFixed';
 
 import withExactProps from '../../lib/withExactProps';
 import type Editor from '../../editor/Editor';
@@ -47,6 +48,13 @@ class ToolBox extends React.Component<Props> {
             shortcutKey="p"
             tool={EditorTools.PEN}
             icon={<CreateIcon />}
+            editor={editor}
+          />
+          <ToolBoxButton
+            name="Key Points"
+            shortcutKey="k"
+            tool={EditorTools.KEY_POINT}
+            icon={<GpsNotFixedIcon />}
             editor={editor}
           />
         </List>

@@ -113,6 +113,40 @@ export const drawShapePointWithControlPoints = (
   drawSquarePoint(ctx, originPoint, size, { fill: fillOrigin });
 };
 
+export const keyPointPath = (
+  ctx: CanvasRenderingContext2D,
+  { x, y }: Point,
+  isActive: boolean,
+  scale: number,
+) => {
+  ctx.beginPath();
+
+  // main cirle
+  ctx.arc(x, y, 10 * scale, 0, 2 * Math.PI, true);
+
+  // cross hairs
+  ctx.moveTo(x - 15 * scale, y);
+  ctx.lineTo(x - 5 * scale, y);
+  ctx.moveTo(x + 5 * scale, y);
+  ctx.lineTo(x + 15 * scale, y);
+  ctx.moveTo(x, y - 15 * scale);
+  ctx.lineTo(x, y - 5 * scale);
+  ctx.moveTo(x, y + 5 * scale);
+  ctx.lineTo(x, y + 15 * scale);
+
+  // cross hair serifs
+  if (isActive) {
+    ctx.moveTo(x - 14.5 * scale, y - 2.5 * scale);
+    ctx.lineTo(x - 14.5 * scale, y + 2.5 * scale);
+    ctx.moveTo(x + 14.5 * scale, y - 2.5 * scale);
+    ctx.lineTo(x + 14.5 * scale, y + 2.5 * scale);
+    ctx.moveTo(x - 2.5 * scale, y - 14.5 * scale);
+    ctx.lineTo(x + 2.5 * scale, y - 14.5 * scale);
+    ctx.moveTo(x - 2.5 * scale, y + 14.5 * scale);
+    ctx.lineTo(x + 2.5 * scale, y + 14.5 * scale);
+  }
+};
+
 export const getShapePath = (
   points: ShapePoint[],
   basePoint: Vector2,

@@ -7,16 +7,25 @@ import KeyPoint from './KeyPoint';
 
 type Props = {
   viewport: Viewport,
+  showAll?: boolean,
 };
 
 class KeyPoints extends React.Component<Props> {
   render() {
-    const { keyPointSet } = this.props.viewport.scene;
+    const { viewport, showAll } = this.props;
+    const { keyPointSet } = viewport.scene;
+    const activeKeyPoint = viewport.nearestKeyPoint;
+    const shouldShowAll = showAll || viewport.keyboard.isPressed('ctrl');
+
     return (
       <>
-        {keyPointSet.keyPoints.map(keyPoint => (
-          <KeyPoint keyPoint={keyPoint} key={String(keyPoint.id)} />
-        ))}
+        {keyPointSet.keyPoints
+          .filter(
+            keyPoint => (shouldShowAll ? true : keyPoint === activeKeyPoint),
+          )
+          .map(keyPoint => (
+            <KeyPoint keyPoint={keyPoint} key={String(keyPoint.id)} />
+          ))}
       </>
     );
   }
