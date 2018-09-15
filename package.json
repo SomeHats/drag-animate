@@ -5,6 +5,11 @@
   "dependencies": {
     "@material-ui/core": "^3.0.1",
     "@material-ui/icons": "^3.0.1",
+    "@types/classnames": "^2.2.6",
+    "@types/invariant": "^2.2.29",
+    "@types/lodash": "^4.14.116",
+    "@types/react-color": "^2.13.6",
+    "@types/react-dom": "^16.0.7",
     "classnames": "^2.2.6",
     "invariant": "^2.2.4",
     "keycode": "^2.2.0",
@@ -16,24 +21,24 @@
     "react-color": "^2.14.1",
     "react-display-name": "^0.2.4",
     "react-dom": "^16.4.2",
-    "react-scripts": "^2.0.0-next.3e165448",
-    "sylvester": "0.0.21"
+    "sylvester": "0.0.21",
+    "utility-types": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "flow check",
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html --out-dir dist --public-url ./drag-animate/ --experimental-scope-hoisting",
+    "test": "tsc",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "flow-bin": "^0.80.0",
-    "flow-typed": "^2.5.1",
-    "prettier": "^1.14.2"
+    "@types/react": "^16.4.13",
+    "parcel-bundler": "^1.9.7",
+    "prettier": "^1.14.2",
+    "typescript": "^3.0.3"
   },
   "browserslist": [
     ">1%",
     "not op_mini all",
     "not ie 11"
-  ],
-  "homepage": "."
+  ]
 }
