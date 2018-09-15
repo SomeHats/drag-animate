@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { observer } from 'mobx-react';
 import ControlBarButton from './ControlBarButton';
 import Editor, { EditorTool } from '../../editor/Editor';
 
@@ -32,4 +33,4 @@ class ControlBarToolButton extends React.Component<ControlBarToolButtonProps> {
   }
 }
 
-export default ControlBarToolButton;
+export default observer(ControlBarToolButton);
