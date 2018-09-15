@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html --out-dir dist --public-url ./drag-animate/",
+    "build": "parcel build src/index.html --out-dir dist --public-url https://alex.dytry.ch/drag-animate/",
     "test": "tsc",
     "eject": "react-scripts eject"
   },
