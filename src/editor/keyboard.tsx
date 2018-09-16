@@ -20,15 +20,14 @@ class Keyboard {
 
   @action
   handleKeyDown = (e: KeyboardEvent) => {
-    e.preventDefault();
     this._isPressedByKeyCode[e.keyCode] = true;
-    this._events.emit(`keyDown:${e.keyCode}`);
+    this._events.emit(`keyDown:${e.keyCode}`, e);
   };
 
   @action
   handleKeyUp = (e: KeyboardEvent) => {
     this._isPressedByKeyCode[e.keyCode] = false;
-    this._events.emit(`keyUp:${e.keyCode}`);
+    this._events.emit(`keyUp:${e.keyCode}`, e);
   };
 
   keyCodeOrNameToKeyCode(keyCodeOrName: number | string): number {

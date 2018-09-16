@@ -58,6 +58,10 @@ class Vector2 {
   scale(amt: number): Vector2 {
     return new Vector2(this.x * amt, this.y * amt);
   }
+
+  toString(): string {
+    return `Vector2(${this.x}, ${this.y})`;
+  }
 }
 
 serializable(Vector2, 'Vector2', ['x', 'y']);

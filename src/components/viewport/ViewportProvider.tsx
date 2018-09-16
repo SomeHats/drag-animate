@@ -135,15 +135,15 @@ export class ViewportProvider extends React.Component<
 
   handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const { deltaX, deltaY, ctrlKey } = e;
+    const { deltaX, deltaY, ctrlKey, clientX, clientY } = e;
     const { viewport } = this.state;
     if (!viewport) return;
 
     if (ctrlKey) {
-      viewport.zoom += viewport.zoom * 0.01 * -deltaY;
+      const zoomAdjust = Math.exp((5 * -deltaY) / viewport.pxHeight);
+      viewport.zoomAtPoint(zoomAdjust, clientX, clientY);
     } else {
-      viewport.panX -= deltaX;
-      viewport.panY -= deltaY;
+      viewport.pan(-deltaX, -deltaY);
     }
   };
 

@@ -152,6 +152,39 @@ class Viewport extends EventEmitter {
     this.zoom = this.idealZoom;
   }
 
+  @action
+  zoomAtPoint(zoomAdjust: number, screenX: number, screenY: number) {
+    console.log(zoomAdjust);
+    const currentZoom = this.zoom;
+    const newZoom = currentZoom * zoomAdjust;
+    const currentSceneCoords = this.screenCoordsToSceneCoords(screenX, screenY);
+
+    this.panX =
+      screenX -
+      this.left -
+      (newZoom / currentZoom) * (screenX - this.left - this.panX);
+    this.panY =
+      screenY -
+      this.top -
+      (newZoom / currentZoom) * (screenY - this.top - this.panY);
+
+    this.zoom = newZoom;
+
+    console.log({
+      oldSceneCoords: currentSceneCoords.toString(),
+      newSceneCoords: this.screenCoordsToSceneCoords(
+        screenX,
+        screenY,
+      ).toString(),
+    });
+  }
+
+  @action
+  pan(x: number, y: number) {
+    this.panX += x;
+    this.panY += y;
+  }
+
   getItemAtSceneCoord(sceneCoord: Vector2): SelectionItem | null {
     const selectThreshold = 8 * this.px;
     testContext.lineWidth = selectThreshold;
