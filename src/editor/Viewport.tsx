@@ -47,7 +47,10 @@ class Viewport extends EventEmitter {
   constructor(editor: Editor) {
     super();
     this.editor = editor;
-    this.basePoint.set(editor.scene.keyPointSet.keyPoints[0]);
+    const { scene } = editor;
+    const centerOfScene = new Vector2(scene.width / 2, scene.height / 2);
+    const keyPointAtCenter = scene.keyPointSet.getNearestTo(centerOfScene);
+    this.basePoint.set(keyPointAtCenter);
   }
 
   @computed
