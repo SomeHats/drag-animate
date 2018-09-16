@@ -23,8 +23,9 @@ ReactDOM.render(
   root,
 );
 
-if (module.hot) {
-  module.hot.dispose(() => {
+const hmr = (module as any).hot;
+if (hmr) {
+  hmr.dispose(() => {
     window.location.reload();
     throw '';
   });
